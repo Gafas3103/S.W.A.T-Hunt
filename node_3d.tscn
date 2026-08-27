@@ -1,8 +1,9 @@
-[gd_scene format=3 uid="uid://detocpfmc4k07"]
+[gd_scene load_steps=8 format=3 uid="uid://detocpfmc4k07"]
 
 [ext_resource type="Script" uid="uid://u7om2eb11b13" path="res://player.gd" id="1_a0tk4"]
 [ext_resource type="Script" uid="uid://w7ma8n2x2exw" path="res://camara.gd" id="2_r3fl7"]
 [ext_resource type="PackedScene" uid="uid://buhcgi5mkgkut" path="res://assets3d/character.fbx" id="3_jka67"]
+[ext_resource type="PackedScene" path="res://hud.tscn" id="4_hud1"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_6cvi3"]
 size = Vector2(15, 15)
@@ -52,3 +53,6 @@ script = ExtResource("2_r3fl7")
 
 [node name="Camera3D" type="Camera3D" parent="CharacterBody3D/SpringArm3D2" unique_id=432552922]
 transform = Transform3D(-0.9996477, 0, -0.026540676, 0, 7.682109, 0, 0.064481415, 0, -2.4286757, -0.12877043, 1.5571842, -1.1813993)
+
+[node name="HUD" parent="." instance=ExtResource("4_hud1")]
+jugador_path = NodePath("../CharacterBody3D")
