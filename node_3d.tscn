@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://detocpfmc4k07"]
+
+[ext_resource type="Script" uid="uid://u7om2eb11b13" path="res://player.gd" id="1_a0tk4"]
+[ext_resource type="Script" uid="uid://w7ma8n2x2exw" path="res://camara.gd" id="2_r3fl7"]
+[ext_resource type="PackedScene" uid="uid://buhcgi5mkgkut" path="res://assets3d/character.fbx" id="3_jka67"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_6cvi3"]
+size = Vector2(15, 15)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3jq7k"]
+size = Vector3(14.951111, 0.26940918, 14.557495)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3wsq6"]
+size = Vector3(1.8392334, 1.8226471, 1)
+
+[node name="Node3D" type="Node3D" unique_id=1665646511]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1114003495]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1769243885]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=2003516368]
+mesh = SubResource("PlaneMesh_6cvi3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=2028846792]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.017486572, 0.03277588, 0.27581787)
+shape = SubResource("BoxShape3D_3jq7k")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1170403441]
+transform = Transform3D(1, 0, 0, 0, -0.9500431, 0.31211883, 0, -0.31211883, -0.9500431, 0.004396558, 1.5727414, -0.34478074)
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1517653207]
+script = ExtResource("1_a0tk4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=417233901]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.026062012, 1.3594258, 0)
+shape = SubResource("BoxShape3D_3wsq6")
+
+[node name="character" parent="CharacterBody3D" unique_id=2055895801 instance=ExtResource("3_jka67")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42751598, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CharacterBody3D" unique_id=539611278]
+transform = Transform3D(1, 0, 0, 0, 0.13017258, 0, 0, 0, 0.41160196, 0, 2.045329, -1.2464156)
+script = ExtResource("2_r3fl7")
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/SpringArm3D" unique_id=1511460067]
+transform = Transform3D(-0.9996477, 0, -0.026540676, 0, 7.682109, 0, 0.064481415, 0, -2.4286757, -0.12877043, 1.5571842, -1.1813993)
+
+[node name="SpringArm3D2" type="SpringArm3D" parent="CharacterBody3D" unique_id=1383265220]
+transform = Transform3D(1, 0, 0, 0, 0.13017258, 0, 0, 0, 0.41160196, 0, 2.045329, -1.2464156)
+script = ExtResource("2_r3fl7")
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/SpringArm3D2" unique_id=432552922]
+transform = Transform3D(-0.9996477, 0, -0.026540676, 0, 7.682109, 0, 0.064481415, 0, -2.4286757, -0.12877043, 1.5571842, -1.1813993)
