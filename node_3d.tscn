@@ -1,9 +1,10 @@
-[gd_scene format=3 uid="uid://detocpfmc4k07"]
+[gd_scene load_steps=8 format=3 uid="uid://detocpfmc4k07"]
 
 [ext_resource type="Script" uid="uid://u7om2eb11b13" path="res://scripts/player.gd" id="1_a0tk4"]
 [ext_resource type="Script" uid="uid://w7ma8n2x2exw" path="res://scripts/camara.gd" id="2_r3fl7"]
 [ext_resource type="PackedScene" uid="uid://buhcgi5mkgkut" path="res://assets3d/character.fbx" id="3_jka67"]
 [ext_resource type="Script" uid="uid://dd3272cyveamq" path="res://scripts/enemigo.gd" id="4_r3fl7"]
+[ext_resource type="PackedScene" path="res://hud.tscn" id="5_hud1"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_6cvi3"]
 size = Vector2(50, 50)
@@ -63,3 +64,5 @@ mesh = SubResource("CapsuleMesh_6cvi3")
 shape = SubResource("CapsuleShape3D_3jq7k")
 
 [node name="RayCast3D" type="RayCast3D" parent="CharacterBody3D2" unique_id=570870050]
+[node name="HUD" parent="." instance=ExtResource("5_hud1")]
+jugador_path = NodePath("../CharacterBody3D")

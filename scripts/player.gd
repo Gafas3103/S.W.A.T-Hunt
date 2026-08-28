@@ -3,9 +3,64 @@ const SPEED = 3.0
 const JUMP_VELOCITY = 4.5
 @onready var anim = $character/AnimationPlayer
 
+@export var vida_maxima := 100
+@export var cargador_maximo := 30
+@export var reserva_maxima := 180
+@export var reserva_inicial := 120
+
+signal vida_cambiada(actual: int, maxima: int)
+signal municion_cambiada(cargador: int, reserva: int)
+signal jugador_murio
+
+var vida: int
+var cargador: int
+var reserva: int
+
 func _ready():
+	add_to_group("jugador")
+	vida = vida_maxima
+	cargador = cargador_maximo
+	reserva = reserva_inicial
+	emitir_estado()
 	if not anim.has_animation_library("walk"):
 		anim.add_animation_library("walk", load("res://assets3d/walking.fbx"))
+
+func emitir_estado() -> void:
+	vida_cambiada.emit(vida, vida_maxima)
+	municion_cambiada.emit(cargador, reserva)
+
+func disparar() -> void:
+	if cargador <= 0:
+		return
+	cargador -= 1
+	municion_cambiada.emit(cargador, reserva)
+
+func recargar() -> void:
+	if cargador == cargador_maximo or reserva <= 0:
+		return
+	var faltan := cargador_maximo - cargador
+	var mueve: int = min(faltan, reserva)
+	cargador += mueve
+	reserva -= mueve
+	municion_cambiada.emit(cargador, reserva)
+
+func recibir_dano(cantidad: int) -> void:
+	if vida <= 0:
+		return
+	vida = clampi(vida - cantidad, 0, vida_maxima)
+	vida_cambiada.emit(vida, vida_maxima)
+	if vida == 0:
+		jugador_murio.emit()
+
+func curar(cantidad: int) -> void:
+	vida = clampi(vida + cantidad, 0, vida_maxima)
+	vida_cambiada.emit(vida, vida_maxima)
+
+func _unhandled_input(evento: InputEvent) -> void:
+	if evento is InputEventMouseButton and evento.pressed and evento.button_index == MOUSE_BUTTON_LEFT:
+		disparar()
+	elif evento is InputEventKey and evento.pressed and not evento.echo and (evento.keycode == KEY_R or evento.physical_keycode == KEY_R):
+		recargar()
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
