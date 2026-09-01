@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://fvud1rytx4tv"]
+
+[ext_resource type="Texture2D" uid="uid://bbhhlfyo7ino0" path="res://assets3d/Mapa/Tile_12-128x128.png" id="1_wm4b4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qgw4m"]
+shading_mode = 0
+diffuse_mode = 3
+albedo_texture = ExtResource("1_wm4b4")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_qbq3j"]
+material = SubResource("StandardMaterial3D_qgw4m")
+
+[sub_resource type="HeightMapShape3D" id="HeightMapShape3D_ragr8"]
+
+[node name="Piso_Pasillo" type="Node3D" unique_id=1774824049]
+
+[node name="Piso" type="StaticBody3D" parent="." unique_id=1334159502]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Piso" unique_id=1500379162]
+transform = Transform3D(3.9055874, 0, 0, 0, 1.1615176, 0, 0, 0, 4.454478, 3.965826, 0, 3.4861097)
+mesh = SubResource("PlaneMesh_qbq3j")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Piso" unique_id=225828848]
+shape = SubResource("HeightMapShape3D_ragr8")
