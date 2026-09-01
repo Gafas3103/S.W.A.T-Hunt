@@ -1,0 +1,113 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_jug"]
+[ext_resource type="Script" path="res://scripts/armas.gd" id="2_arm"]
+[ext_resource type="PackedScene" path="res://assets3d/character.fbx" id="3_pj"]
+[ext_resource type="PackedScene" path="res://assets3d/armas/hk416/hk416.fbx" id="4_hk"]
+[ext_resource type="PackedScene" path="res://assets3d/armas/pistola/pistola.fbx" id="5_pis"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jug"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="Mat_mango"]
+albedo_color = Color(0.09, 0.09, 0.1, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="Mat_hoja"]
+albedo_color = Color(0.72, 0.74, 0.78, 1)
+metallic = 0.9
+roughness = 0.25
+
+[sub_resource type="BoxMesh" id="BoxMesh_mango"]
+size = Vector3(0.12, 0.028, 0.022)
+
+[sub_resource type="BoxMesh" id="BoxMesh_guarda"]
+size = Vector3(0.014, 0.055, 0.03)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hoja"]
+size = Vector3(0.22, 0.028, 0.006)
+
+[node name="Jugador" type="CharacterBody3D" groups=["jugador"]]
+collision_layer = 1
+collision_mask = 1
+script = ExtResource("1_jug")
+
+[node name="Colision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+shape = SubResource("CapsuleShape3D_jug")
+
+[node name="character" parent="." instance=ExtResource("3_pj")]
+
+[node name="Pivote" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="Brazo" type="SpringArm3D" parent="Pivote"]
+transform = Transform3D(1, 0, 0, 0, 0.98481, 0.173648, 0, -0.173648, 0.98481, 0, 0, 0)
+spring_length = 2.6
+margin = 0.25
+
+[node name="Soporte" type="Node3D" parent="Pivote/Brazo"]
+
+[node name="Camara" type="Camera3D" parent="Pivote/Brazo/Soporte"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, 0)
+fov = 75.0
+current = true
+near = 0.05
+far = 400.0
+
+[node name="Armas" type="Node3D" parent="."]
+transform = Transform3D(0, 1, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0)
+script = ExtResource("2_arm")
+
+[node name="HK416" type="Node3D" parent="Armas"]
+
+[node name="Modelo" parent="Armas/HK416" instance=ExtResource("4_hk")]
+transform = Transform3D(0.0244, 0, 0, 0, 0.0244, 0, 0, 0, 0.0244, 0.0732, 0.0244, 0)
+
+[node name="Punta" type="Marker3D" parent="Armas/HK416"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.523, 0.024, 0)
+
+[node name="Fogonazo" type="OmniLight3D" parent="Armas/HK416"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 0.024, 0)
+visible = false
+light_color = Color(1, 0.83, 0.5, 1)
+light_energy = 6.0
+omni_range = 3.5
+
+[node name="Pistola" type="Node3D" parent="Armas"]
+visible = false
+
+[node name="Modelo" parent="Armas/Pistola" instance=ExtResource("5_pis")]
+transform = Transform3D(0.055, 0, 0, 0, 0.055, 0, 0, 0, 0.055, 0.0792, 0.0085, 0)
+
+[node name="Punta" type="Marker3D" parent="Armas/Pistola"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.188, 0.0085, 0)
+
+[node name="Fogonazo" type="OmniLight3D" parent="Armas/Pistola"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.21, 0.0085, 0)
+visible = false
+light_color = Color(1, 0.83, 0.5, 1)
+light_energy = 5.0
+omni_range = 3.0
+
+[node name="Cuchillo" type="Node3D" parent="Armas"]
+visible = false
+
+[node name="Mango" type="MeshInstance3D" parent="Armas/Cuchillo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0, 0)
+mesh = SubResource("BoxMesh_mango")
+surface_material_override/0 = SubResource("Mat_mango")
+
+[node name="Guarda" type="MeshInstance3D" parent="Armas/Cuchillo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.127, 0, 0)
+mesh = SubResource("BoxMesh_guarda")
+surface_material_override/0 = SubResource("Mat_mango")
+
+[node name="Hoja" type="MeshInstance3D" parent="Armas/Cuchillo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.245, 0.004, 0)
+mesh = SubResource("BoxMesh_hoja")
+surface_material_override/0 = SubResource("Mat_hoja")
+
+[node name="Punta" type="Marker3D" parent="Armas/Cuchillo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36, 0.004, 0)

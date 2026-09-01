@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemigo.gd" id="1_ene"]
+[ext_resource type="PackedScene" path="res://assets3d/character.fbx" id="2_pj"]
+[ext_resource type="PackedScene" path="res://assets3d/armas/ak47/ak47.fbx" id="3_ak"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ene"]
+radius = 0.35
+height = 1.8
+
+[node name="Enemigo" type="CharacterBody3D" groups=["enemigo"]]
+collision_layer = 1
+collision_mask = 1
+script = ExtResource("1_ene")
+
+[node name="Colision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+shape = SubResource("CapsuleShape3D_ene")
+
+[node name="character" parent="." instance=ExtResource("2_pj")]
+
+[node name="Arma" type="Node3D" parent="."]
+transform = Transform3D(0, 1, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0)
+
+[node name="Modelo" parent="Arma" instance=ExtResource("3_ak")]
+transform = Transform3D(0.459, 0, 0, 0, 0.459, 0, 0, 0, 0.459, -1.9934, -0.0138, -0.1813)
+
+[node name="Punta" type="Marker3D" parent="Arma"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.594, 0.03, 0)
+
+[node name="Fogonazo" type="OmniLight3D" parent="Arma"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 0.03, 0)
+visible = false
+light_color = Color(1, 0.8, 0.45, 1)
+light_energy = 6.0
+omni_range = 3.5
