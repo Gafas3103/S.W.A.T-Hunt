@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/puerta.gd" id="1_pue"]
+[ext_resource type="PackedScene" path="res://assets3d/props/candado/candado.fbx" id="2_can"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_puerta"]
+albedo_color = Color(0.29, 0.19, 0.12, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_hoja"]
+size = Vector3(2, 2.4, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hoja"]
+size = Vector3(2, 2.4, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_zona"]
+size = Vector3(3.5, 2.5, 3.5)
+
+[node name="Puerta" type="Node3D"]
+script = ExtResource("1_pue")
+
+[node name="Hoja" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="Malla" type="MeshInstance3D" parent="Hoja"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.2, 0)
+mesh = SubResource("BoxMesh_hoja")
+surface_material_override/0 = SubResource("Mat_puerta")
+
+[node name="Colision" type="CollisionShape3D" parent="Hoja"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.2, 0)
+shape = SubResource("BoxShape3D_hoja")
+
+[node name="Candado" parent="." instance=ExtResource("2_can")]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 1.8, 1.15, 0.09)
+
+[node name="Zona" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.2, 0)
+collision_layer = 0
+collision_mask = 1
+
+[node name="Colision" type="CollisionShape3D" parent="Zona"]
+shape = SubResource("BoxShape3D_zona")
