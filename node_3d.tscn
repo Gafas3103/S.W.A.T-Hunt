@@ -25,7 +25,6 @@ size = Vector3(1.8392334, 1.8226471, 1)
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1114003495]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1769243885]
-visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=2003516368]
 mesh = SubResource("PlaneMesh_6cvi3")
