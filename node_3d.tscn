@@ -6,12 +6,8 @@
 [ext_resource type="Script" uid="uid://dd3272cyveamq" path="res://scripts/enemigo.gd" id="4_r3fl7"]
 [ext_resource type="PackedScene" path="res://hud.tscn" id="5_hud1"]
 [ext_resource type="PackedScene" uid="uid://c4p16rsxosl2o" path="res://Mapa.tscn" id="6_i5arm"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_6cvi3"]
-size = Vector2(50, 50)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_3jq7k"]
-size = Vector3(50.313046, 0.26940918, 50.198456)
+[ext_resource type="PackedScene" path="res://escenas/puerta.tscn" id="7_wc5p8"]
+[ext_resource type="PackedScene" uid="uid://du38r1nky663u" path="res://Cuarto_2.tscn" id="8_jsk3o"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3wsq6"]
 size = Vector3(1.8392334, 1.8226471, 1)
@@ -24,15 +20,6 @@ size = Vector3(1.8392334, 1.8226471, 1)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1114003495]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1769243885]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=2003516368]
-mesh = SubResource("PlaneMesh_6cvi3")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=2028846792]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14910698, 0.03277588, 0.21488953)
-shape = SubResource("BoxShape3D_3jq7k")
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1170403441]
 transform = Transform3D(1, 0, 0, 0, -0.9500431, 0.31211883, 0, -0.31211883, -0.9500431, 0.004396558, 1.5727414, -0.34478074)
 
@@ -44,7 +31,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.026062012, 1.3594258, 0)
 shape = SubResource("BoxShape3D_3wsq6")
 
 [node name="character" parent="CharacterBody3D" unique_id=2055895801 instance=ExtResource("3_jka67")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42751598, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.53835, 0.42751598, 0)
 
 [node name="SpringArm3D" type="SpringArm3D" parent="CharacterBody3D" unique_id=539611278]
 transform = Transform3D(1, 0, 0, 0, 0.9396926, 0.34202012, 0, -0.34202012, 0.9396926, 0, 1.4, 0)
@@ -70,3 +57,7 @@ shape = SubResource("CapsuleShape3D_3jq7k")
 jugador_path = NodePath("../CharacterBody3D")
 
 [node name="Mapa" parent="." unique_id=2022714010 instance=ExtResource("6_i5arm")]
+
+[node name="Puerta" parent="." unique_id=945296650 instance=ExtResource("7_wc5p8")]
+
+[node name="Cuarto1" parent="." unique_id=1309409082 instance=ExtResource("8_jsk3o")]

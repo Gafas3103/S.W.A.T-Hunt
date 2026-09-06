@@ -6,6 +6,7 @@
 shading_mode = 0
 diffuse_mode = 3
 albedo_texture = ExtResource("1_wm4b4")
+uv1_scale = Vector3(4, 4, 4)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_qbq3j"]
 material = SubResource("StandardMaterial3D_qgw4m")
@@ -17,7 +18,7 @@ material = SubResource("StandardMaterial3D_qgw4m")
 [node name="Piso" type="StaticBody3D" parent="." unique_id=1334159502]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Piso" unique_id=1500379162]
-transform = Transform3D(3.9055874, 0, 0, 0, 1.1615176, 0, 0, 0, 4.454478, 3.965826, 0, 3.4861097)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.966, 0, -15.041664)
 mesh = SubResource("PlaneMesh_qbq3j")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Piso" unique_id=225828848]

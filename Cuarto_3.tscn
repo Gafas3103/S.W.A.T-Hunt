@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://b4t5ybs5ajmeh"]
+
+[ext_resource type="Texture2D" uid="uid://bw4jwpkckvccx" path="res://assets3d/Mapa/Bricks_17-128x128.png" id="1_0pvsg"]
+[ext_resource type="Texture2D" uid="uid://bgscbm03lajrg" path="res://assets3d/Mapa/Tile_09-128x128.png" id="2_0pvsg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3g1m8"]
+albedo_texture = ExtResource("1_0pvsg")
+uv1_scale = Vector3(3, 3, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ik31s"]
+material = SubResource("StandardMaterial3D_3g1m8")
+size = Vector3(0.99668884, 1.0042114, 0.25)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cdmtq"]
+albedo_texture = ExtResource("1_0pvsg")
+uv1_scale = Vector3(3, 3, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_r4kde"]
+material = SubResource("StandardMaterial3D_cdmtq")
+size = Vector3(1.5596924, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ticvn"]
+albedo_texture = ExtResource("2_0pvsg")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ik31s"]
+material = SubResource("StandardMaterial3D_ticvn")
+size = Vector2(2, 2.1)
+
+[node name="Cuarto1" type="Node3D" unique_id=1309409082]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=385614858]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=2035586921]
+transform = Transform3D(8.957976, 0, 0, 0, 4.8154016, 0, 0, 0, 1, 4.785574, 2.3667583, -0.16187948)
+mesh = SubResource("BoxMesh_ik31s")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="." unique_id=568654126]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.455225, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D2" unique_id=1782012924]
+transform = Transform3D(9.582195, 0, 0, 0, 4.8154016, 0, 0, 0, 0.8319628, 14.305216, 2.5265186, -0.17714989)
+mesh = SubResource("BoxMesh_ik31s")
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="." unique_id=259890560]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.455225, 0, -3.0184507)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D3" unique_id=33737051]
+transform = Transform3D(-8.6636624e-07, 0, 1.1504023, 0, 4.815402, 0, -19.820148, 0, -5.028568e-08, -6.184709, 2.318555, -6.929509)
+mesh = SubResource("BoxMesh_ik31s")
+
+[node name="StaticBody3D4" type="StaticBody3D" parent="." unique_id=1722954389]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.401714, 0.8045087, -1.6163807)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D4" unique_id=1001631957]
+transform = Transform3D(-9.1283624e-07, 0, 1.1504023, 0, 4.815402, 0, -20.883259, 0, -5.028568e-08, 11.992445, 1.6714997, -8.348477)
+mesh = SubResource("BoxMesh_ik31s")
+
+[node name="StaticBody3D5" type="StaticBody3D" parent="." unique_id=609588416]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.401714, 0.8045087, -1.6163807)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D5" unique_id=1050209569]
+transform = Transform3D(15.933273, -0.008331507, 1.2670754e-12, 0.02780731, 4.773336, -0.0037384273, 0.00029120807, 0.04998809, 0.3569804, -0.8056202, 1.5802445, -18.301064)
+mesh = SubResource("BoxMesh_r4kde")
+
+[node name="StaticBody3D6" type="StaticBody3D" parent="." unique_id=866895171]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D6" unique_id=19065767]
+transform = Transform3D(12.2525425, 0, 0, 0, 1.5876958, 0, 0, 0, 9.562593, 12.652557, -0.035170376, -10.175138)
+mesh = SubResource("PlaneMesh_ik31s")
