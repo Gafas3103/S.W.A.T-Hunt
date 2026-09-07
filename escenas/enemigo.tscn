@@ -1,59 +1,26 @@
-[gd_scene format=3 uid="uid://sl8oegg2cq6h"]
+[gd_scene load_steps=5 format=3]
 
-[ext_resource type="Script" uid="uid://dd3272cyveamq" path="res://scripts/enemigo.gd" id="1_ene"]
-[ext_resource type="PackedScene" path="res://assets3d/enemigo/Ch15_nonPBR.fbx" id="2_743j8"]
+[ext_resource type="Script" path="res://scripts/enemigo.gd" id="1_ene"]
+[ext_resource type="PackedScene" path="res://assets3d/character.fbx" id="2_pj"]
 [ext_resource type="PackedScene" path="res://assets3d/armas/ak47/ak47.fbx" id="3_ak"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ene"]
 radius = 0.35
 height = 1.8
 
-[sub_resource type="Curve" id="Curve_sangre"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_sangre"]
-curve = SubResource("Curve_sangre")
-
-[sub_resource type="Gradient" id="Gradient_sangre"]
-offsets = PackedFloat32Array(0, 1)
-colors = PackedColorArray(0.62, 0.04, 0.04, 1, 0.28, 0.01, 0.01, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_sangre"]
-gradient = SubResource("Gradient_sangre")
-
-[sub_resource type="ParticleProcessMaterial" id="Proceso_sangre"]
-emission_shape = 1
-emission_sphere_radius = 0.18
-angle_max = 360.0
-spread = 55.0
-initial_velocity_min = 1.6
-initial_velocity_max = 3.4
-gravity = Vector3(0, -9.8, 0)
-scale_min = 0.4
-scale_max = 1.0
-scale_curve = SubResource("CurveTexture_sangre")
-color_ramp = SubResource("GradientTexture1D_sangre")
-
-[sub_resource type="SphereMesh" id="SphereMesh_sangre"]
-radius = 0.035
-height = 0.07
-radial_segments = 6
-rings = 3
-
-[sub_resource type="StandardMaterial3D" id="Mat_sangre"]
-shading_mode = 1
-albedo_color = Color(0.55, 0.03, 0.03, 1)
-vertex_color_use_as_albedo = true
-
 [node name="Enemigo" type="CharacterBody3D" groups=["enemigo"]]
+collision_layer = 1
+collision_mask = 1
 script = ExtResource("1_ene")
 
 [node name="Colision" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
 shape = SubResource("CapsuleShape3D_ene")
 
-[node name="character" parent="." instance=ExtResource("2_743j8")]
+[node name="character" parent="." instance=ExtResource("2_pj")]
+
+[node name="Navegante" type="NavigationAgent3D" parent="."]
+avoidance_enabled = false
 
 [node name="Arma" type="Node3D" parent="."]
 transform = Transform3D(0, 1, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0)
@@ -70,14 +37,3 @@ visible = false
 light_color = Color(1, 0.8, 0.45, 1)
 light_energy = 6.0
 omni_range = 3.5
-
-[node name="Sangre" type="GPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0)
-emitting = false
-amount = 18
-lifetime = 0.7
-one_shot = true
-explosiveness = 1.0
-process_material = SubResource("Proceso_sangre")
-draw_pass_1 = SubResource("SphereMesh_sangre")
-material_override = SubResource("Mat_sangre")

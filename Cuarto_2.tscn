@@ -1,13 +1,12 @@
 [gd_scene format=3 uid="uid://du38r1nky663u"]
 
-[ext_resource type="PackedScene" uid="uid://bq83sgwcyqhqr" path="res://escenas/puerta.tscn" id="1_7gcsb"]
+[ext_resource type="PackedScene" uid="uid://bq83sgwcyqhqr" path="res://escenas/puerta_candado.tscn" id="1_7gcsb"]
 [ext_resource type="Texture2D" uid="uid://bw4jwpkckvccx" path="res://assets3d/Mapa/Bricks_17-128x128.png" id="1_enft7"]
 [ext_resource type="Texture2D" uid="uid://cgq8jqb7hps78" path="res://assets3d/Mapa/Tile_10-128x128.png" id="2_enft7"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bk0yi"]
 albedo_texture = ExtResource("1_enft7")
-uv1_scale = Vector3(1, 1, 1)
-uv1_triplanar = true
+uv1_scale = Vector3(12, 3, 0.5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_ticvn"]
 material = SubResource("StandardMaterial3D_bk0yi")
@@ -18,8 +17,7 @@ size = Vector3(12, 3, 0.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_77b3p"]
 albedo_texture = ExtResource("1_enft7")
-uv1_scale = Vector3(1, 1, 1)
-uv1_triplanar = true
+uv1_scale = Vector3(12, 3, 0.5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_cdmtq"]
 material = SubResource("StandardMaterial3D_77b3p")
@@ -30,8 +28,7 @@ size = Vector3(12, 3, 0.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1e2sp"]
 albedo_texture = ExtResource("1_enft7")
-uv1_scale = Vector3(1, 1, 1)
-uv1_triplanar = true
+uv1_scale = Vector3(12, 3, 0.5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_3g1m8"]
 material = SubResource("StandardMaterial3D_1e2sp")
@@ -42,8 +39,7 @@ size = Vector3(12.5, 3, 0.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2g2ug"]
 albedo_texture = ExtResource("2_enft7")
-uv1_scale = Vector3(1, 1, 1)
-uv1_triplanar = true
+uv1_scale = Vector3(12, 4, 12)
 
 [sub_resource type="BoxMesh" id="BoxMesh_bk0yi"]
 material = SubResource("StandardMaterial3D_2g2ug")
@@ -54,8 +50,7 @@ size = Vector3(12, 0.1, 12)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_enft7"]
 albedo_texture = ExtResource("1_enft7")
-uv1_scale = Vector3(1, 1, 1)
-uv1_triplanar = true
+uv1_scale = Vector3(5, 3, 0.5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_t35bo"]
 material = SubResource("StandardMaterial3D_enft7")
@@ -66,8 +61,7 @@ size = Vector3(5, 3, 0.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uphkx"]
 albedo_texture = ExtResource("1_enft7")
-uv1_scale = Vector3(1, 1, 1)
-uv1_triplanar = true
+uv1_scale = Vector3(5.1, 3, 0.5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_hyxcp"]
 material = SubResource("StandardMaterial3D_uphkx")
@@ -138,5 +132,5 @@ mesh = SubResource("BoxMesh_hyxcp")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.67, 1.5, 5.74)
 shape = SubResource("BoxShape3D_t35bo")
 
-[node name="Puerta" parent="." unique_id=759643513 instance=ExtResource("1_7gcsb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.1, 1.25, 5.76)
+[node name="Puerta_Candado" parent="." unique_id=759643513 instance=ExtResource("1_7gcsb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.052969, 1.3, 5.866766)

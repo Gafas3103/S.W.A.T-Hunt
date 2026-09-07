@@ -4,20 +4,30 @@
 [ext_resource type="PackedScene" uid="uid://fvud1rytx4tv" path="res://Piso_Pasillo.tscn" id="1_rml5n"]
 [ext_resource type="PackedScene" uid="uid://bh3e07t44w3fq" path="res://Cuarto_1.tscn" id="2_622qf"]
 [ext_resource type="PackedScene" uid="uid://b4t5ybs5ajmeh" path="res://Cuarto_3.tscn" id="4_udyo2"]
+[ext_resource type="PackedScene" path="res://escenas/llave.tscn" id="5_udyo2"]
 
-[node name="Mapa" type="Node3D"]
+[node name="Mapa" type="Node3D" unique_id=2022714010]
 
-[node name="Piso_Pasillo" parent="." instance=ExtResource("1_rml5n")]
+[node name="Cuarto1" parent="." unique_id=234500075 instance=ExtResource("2_622qf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.61631, 0, 3.2618058)
+
+[node name="Cuarto1_2" parent="." unique_id=1309409082 instance=ExtResource("2_622qf")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 14.482828, 0, 22.083399)
+
+[node name="Cuarto2" parent="." unique_id=2075263655 instance=ExtResource("1_qgw4m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.181179, 0, 0.73766184)
+
+[node name="Cuarto2_2" parent="." unique_id=1698359828 instance=ExtResource("1_qgw4m")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 26.959446, 0, 24.48199)
+
+[node name="Cuarto3" parent="." unique_id=434049719 instance=ExtResource("4_udyo2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.537813, 0, 4.191727)
+
+[node name="Cuarto3_2" parent="." unique_id=519239849 instance=ExtResource("4_udyo2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.13028622, 0, 21.672363)
+
+[node name="Piso_Pasillo" parent="." unique_id=1774824049 instance=ExtResource("1_rml5n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.588, -0.004, 12)
 
-[node name="Cuarto2_Oeste" parent="." instance=ExtResource("1_qgw4m")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -5.65, 0, 20)
-
-[node name="Cuarto1_Oeste" parent="." instance=ExtResource("2_622qf")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -3.15, 0, 28)
-
-[node name="Cuarto3_Este" parent="." instance=ExtResource("4_udyo2")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 17.1, 0, 8)
-
-[node name="Cuarto1_Este" parent="." instance=ExtResource("2_622qf")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 11.35, 0, 25)
+[node name="Llave" parent="." unique_id=631088677 instance=ExtResource("5_udyo2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.395504, 0, 17.120808)

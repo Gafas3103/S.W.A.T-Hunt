@@ -14,19 +14,19 @@ signal impacto(en_enemigo: bool)
 signal agachado_cambiado(activo: bool)
 
 const ANIMACIONES := {
-	"quieto": "res://assets3d/player/rifle aiming idle.fbx",
-	"caminar": "res://assets3d/player/walking.fbx",
-	"correr": "res://assets3d/player/rifle run.fbx",
-	"atras": "res://assets3d/player/walking backwards.fbx",
-	"izquierda": "res://assets3d/player/strafe left.fbx",
-	"derecha": "res://assets3d/player/strafe right.fbx",
-	"pistola": "res://assets3d/player/Pistol Walk.fbx",
-	"disparar": "res://assets3d/player/firing rifle.fbx",
-	"recargar": "res://assets3d/player/reloading.fbx",
-	"cuchillada": "res://assets3d/player/toss grenade.fbx",
-	"saltar": "res://assets3d/player/rifle jump.fbx",
-	"golpeado": "res://assets3d/player/hit reaction.fbx",
-	"morir": "res://assets3d/player/walking to dying.fbx"
+	"quieto": "res://assets3d/rifle aiming idle.fbx",
+	"caminar": "res://assets3d/walking.fbx",
+	"correr": "res://assets3d/rifle run.fbx",
+	"atras": "res://assets3d/walking backwards.fbx",
+	"izquierda": "res://assets3d/strafe left.fbx",
+	"derecha": "res://assets3d/strafe right.fbx",
+	"pistola": "res://assets3d/Pistol Walk.fbx",
+	"disparar": "res://assets3d/firing rifle.fbx",
+	"recargar": "res://assets3d/reloading.fbx",
+	"cuchillada": "res://assets3d/toss grenade.fbx",
+	"saltar": "res://assets3d/rifle jump.fbx",
+	"golpeado": "res://assets3d/hit reaction.fbx",
+	"morir": "res://assets3d/walking to dying.fbx"
 }
 
 const CICLICAS := ["quieto", "caminar", "correr", "atras", "izquierda", "derecha", "pistola"]
@@ -41,17 +41,20 @@ const CICLICAS := ["quieto", "caminar", "correr", "atras", "izquierda", "derecha
 @export var altura_agachado := 1.05
 @export var camara_de_pie := 1.5
 @export var camara_agachado := 0.95
-@export var ruido_disparo := 11.0
 
-@export_group("Agacharse")
-@export var crouch_cadera := 0.14
-@export var crouch_inclina := 14.0
-@export var crouch_muslo := 0.0
-@export var crouch_rodilla := 0.0
-@export var crouch_tobillo := 0.0
-@export var crouch_espalda := 0.0
+@export_group("Agacharse (dobla el esqueleto, no hay animación)")
+## Agachado. Por defecto usa solo bajar la cadera + inclinar el cuerpo (lo que
+## se ve seguro). Los ángulos de piernas están a 0: súbelos en marcha viendo al
+## personaje si quieres que además doble las rodillas (ojo: la animación que
+## suene puede pelearse con ellos). Signo negativo = dobla al revés.
+@export var crouch_cadera := 0.14   ## metros que baja TODO el cuerpo
+@export var crouch_inclina := 14.0  ## grados que se inclina el personaje entero hacia adelante
+@export var crouch_muslo := 0.0     ## dobla el muslo
+@export var crouch_rodilla := 0.0   ## dobla la rodilla
+@export var crouch_tobillo := 0.0   ## ajuste del tobillo
+@export var crouch_espalda := 0.0   ## encorva la espalda
 
-@export_group("Camara y punteria")
+@export_group("Cámara y puntería")
 @export var sensibilidad := 0.0022
 @export var angulo_minimo := -60.0
 @export var angulo_maximo := 35.0
@@ -81,11 +84,18 @@ var animacion_actual := ""
 var giro_modelo := 0.0
 var interactuable: Node = null
 var texto_interaccion := ""
-var disparo_timer := 0.0
 
+# clave lógica -> "libreria/nombre_real_de_la_animacion".
+# Godot nombra la animación dentro del .fbx según Mixamo ("mixamo.com",
+# "mixamo_com"... cambia entre versiones), así que en vez de adivinarlo lo
+# leemos de la propia librería al cargarla.
 var _pista := {}
 var _capsula: CapsuleShape3D = null
-var _crouch := 0.0
+var disparo_timer := 0.0   # mantiene visible la pose de disparo unos ms tras cada tiro
+
+# Agacharse: no hay animación, así que doblamos el esqueleto a mano en _process
+# (después de que la animación escriba los huesos ese frame).
+var _crouch := 0.0                 # 0 de pie ... 1 agachado, suavizado
 var _h_muslo_i := -1
 var _h_muslo_d := -1
 var _h_rodilla_i := -1
@@ -95,19 +105,22 @@ var _h_tobillo_d := -1
 var _h_espalda := -1
 var _h_cadera := -1
 var _cadera_base := Vector3.ZERO
-var _rest := {}
+var _rest := {}   # hueso -> Quaternion en reposo, para doblar en ABSOLUTO (sin acumular)
 
 
 func _ready() -> void:
 	add_to_group("jugador")
 	vida = vida_maxima
 	if colision.shape is CapsuleShape3D:
+		# duplicamos para no tocar el recurso compartido de la escena.
 		colision.shape = colision.shape.duplicate()
 		_capsula = colision.shape
 		altura_de_pie = _capsula.height
-		colision.position.y = _capsula.height * 0.5
 	_preparar_animaciones()
 	_montar_armas()
+	# la animación se aplica en el paso de física; así, en _process (que va
+	# después) podemos doblar las piernas para agacharnos sin que la animación
+	# lo pise.
 	anim.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_PHYSICS
 	_h_muslo_i = esqueleto.find_bone("mixamorig_LeftUpLeg")
 	_h_muslo_d = esqueleto.find_bone("mixamorig_RightUpLeg")
@@ -119,8 +132,11 @@ func _ready() -> void:
 	_h_cadera = esqueleto.find_bone("mixamorig_Hips")
 	for h in [_h_muslo_i, _h_muslo_d, _h_rodilla_i, _h_rodilla_d, _h_tobillo_i, _h_tobillo_d, _h_espalda]:
 		if h != -1:
+			# aquí todavía no suena ninguna animación, así que la pose es la de reposo
 			_rest[h] = esqueleto.get_bone_pose_rotation(h)
 	if _h_cadera != -1:
+		# posición "de pie" de la cadera (a las animaciones les quitamos su track
+		# de posición, así que esto no cambia solo y lo fijamos en absoluto).
 		_cadera_base = esqueleto.get_bone_pose_position(_h_cadera)
 	brazo.add_excluded_object(get_rid())
 	brazo.spring_length = brazo_normal
@@ -131,6 +147,18 @@ func _ready() -> void:
 	armas.arma_cambiada.connect(_reenviar_arma)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	emitir_estado()
+	_colocar_en_suelo.call_deferred()
+
+
+func _colocar_en_suelo() -> void:
+	# El spawn del nivel puede estar a cualquier altura; en lugar de caer desde
+	# el aire, anclamos el jugador al suelo con un raycast hacia abajo.
+	var desde := global_position + Vector3.UP * 2.0
+	var consulta := PhysicsRayQueryParameters3D.create(desde, global_position - Vector3.UP * 12.0)
+	consulta.exclude = [get_rid()]
+	var golpe := get_world_3d().direct_space_state.intersect_ray(consulta)
+	if not golpe.is_empty():
+		global_position.y = golpe.position.y + 0.05
 
 
 func _reenviar_municion(cargador: int, reserva: int) -> void:
@@ -148,7 +176,7 @@ func _preparar_animaciones() -> void:
 			if lib is AnimationLibrary:
 				anim.add_animation_library(clave, lib)
 		if not anim.has_animation_library(clave):
-			push_warning("Jugador: no se pudo cargar la animacion '%s' (%s)" % [clave, ANIMACIONES[clave]])
+			push_warning("Jugador: no pude cargar la animación '%s' (%s)" % [clave, ANIMACIONES[clave]])
 			continue
 		var libreria := anim.get_animation_library(clave)
 		var lista := libreria.get_animation_list()
@@ -159,18 +187,33 @@ func _preparar_animaciones() -> void:
 		var pista := anim.get_animation(nombre)
 		if pista == null:
 			continue
-		_quitar_traslacion_raiz(pista)
+		# Las animaciones de Mixamo llevan el desplazamiento del cuerpo dentro
+		# del hueso Hips. El juego ya mueve al personaje con velocity, así que
+		# esa traslación sobra: hace que el modelo "patine" y vuelva de golpe.
+		_quitar_traslacion_raiz(pista) if clave != "morir" else _conservar_desplome(pista)
 		if clave in CICLICAS:
 			pista.loop_mode = Animation.LOOP_LINEAR
 
 
 func _quitar_traslacion_raiz(a: Animation) -> void:
 	for i in range(a.get_track_count() - 1, -1, -1):
+		if a.track_get_type(i) == Animation.TYPE_POSITION_3D:
+			var ruta := String(a.track_get_path(i))
+			if ruta.ends_with(":mixamorig_Hips") or ruta.ends_with(":Hips"):
+				a.remove_track(i)
+
+
+func _conservar_desplome(a: Animation) -> void:
+	# Igual que _quitar_traslacion_raiz pero conservando el eje Y del desplome:
+	# al morir el cuerpo cae a ras de suelo, pero sin avanzar/deslizarse en x/z.
+	for i in range(a.get_track_count() - 1, -1, -1):
 		if a.track_get_type(i) != Animation.TYPE_POSITION_3D:
 			continue
 		var ruta := String(a.track_get_path(i))
 		if ruta.ends_with(":mixamorig_Hips") or ruta.ends_with(":Hips"):
-			a.remove_track(i)
+			for k in range(a.track_get_key_count(i)):
+				var v: Vector3 = a.track_get_key_value(i, k)
+				a.track_set_key_value(i, k, Vector3(0.0, v.y, 0.0))
 
 
 func _montar_armas() -> void:
@@ -184,7 +227,6 @@ func _montar_armas() -> void:
 func emitir_estado() -> void:
 	vida_cambiada.emit(vida, vida_maxima)
 	llave_cambiada.emit(tiene_llave)
-	agachado_cambiado.emit(agachado)
 	armas.avisar_municion()
 	arma_cambiada.emit(armas.datos()["nombre"], armas.indice)
 
@@ -255,6 +297,7 @@ func avisar_baja() -> void:
 
 func _unhandled_input(evento: InputEvent) -> void:
 	if evento.is_action_pressed("pausa"):
+		# el menú de pausa lo gestiona el HUD; aquí solo cerramos la nota.
 		if leyendo:
 			cerrar_nota()
 		return
@@ -343,6 +386,7 @@ func _actualizar_apuntado(delta: float) -> void:
 
 func _actualizar_agachado(delta: float) -> void:
 	var quiere := Input.is_action_pressed("agacharse") and is_on_floor()
+	# si hay techo justo encima no dejamos que se levante.
 	if not quiere and agachado and _hay_techo():
 		quiere = true
 	if quiere != agachado:
@@ -358,6 +402,11 @@ func _actualizar_agachado(delta: float) -> void:
 
 
 func _process(_delta: float) -> void:
+	# Doblar el esqueleto para simular el agachado. Mientras se agacha, las
+	# piernas y la espalda se ponen en ABSOLUTO desde su pose de reposo (no se
+	# suman a la animación): así no se acumula ni "explota" aunque el clip que
+	# suene no toque esos huesos.
+	# inclinar el personaje entero hacia adelante (predecible, no depende del rig)
 	modelo.rotation.x = deg_to_rad(crouch_inclina) * _crouch
 	if _crouch <= 0.002:
 		return
@@ -373,6 +422,7 @@ func _process(_delta: float) -> void:
 
 
 func _doblar(hueso: int, angulo: float) -> void:
+	# ángulo 0 = no tocamos ese hueso (que lo controle la animación).
 	if hueso == -1 or not _rest.has(hueso) or absf(angulo) < 0.001:
 		return
 	var base: Quaternion = _rest[hueso]
@@ -401,6 +451,8 @@ func _girar_modelo(direccion: Vector3, delta: float) -> void:
 func _elegir_animacion(entrada: Vector2, corriendo: bool) -> void:
 	if accion > 0.0:
 		return
+	# tras disparar desde la cadera dejamos ver la pose de disparo un momento
+	# (si no, la anim de caminar/quieto la tapa en el mismo frame).
 	if disparo_timer > 0.0 and is_on_floor():
 		return
 	var plana := Vector2(velocity.x, velocity.z).length()
@@ -425,6 +477,8 @@ func _elegir_animacion(entrada: Vector2, corriendo: bool) -> void:
 
 
 func _anim_play(clave: String, mezcla: float, reiniciar := false, velocidad := 1.0) -> void:
+	# Reproduce la animación real detrás de la clave lógica. Si el .fbx no
+	# cargó, no hace nada (en vez de romper con "animation not found").
 	if not _pista.has(clave):
 		return
 	var nombre: String = _pista[clave]
@@ -436,6 +490,8 @@ func _anim_play(clave: String, mezcla: float, reiniciar := false, velocidad := 1
 		anim.seek(0.0, true)
 
 
+# Acelera un clip de una sola vez para que quepa en 'dur' segundos, así se ve
+# completo en vez de cortarse a la mitad.
 func _duracion_clip(clave: String) -> float:
 	if _pista.has(clave):
 		var clip := anim.get_animation(_pista[clave])
@@ -452,7 +508,7 @@ func _recargar() -> void:
 		var largo := _duracion_clip("recargar")
 		_anim_play("recargar", 0.15, true, largo / dur if largo > 0.2 else 1.0)
 		accion = dur
-		armas.espera = maxf(armas.espera, dur)
+		armas.espera = maxf(armas.espera, dur)   # no disparar hasta terminar la recarga
 
 
 func _disparar() -> void:
@@ -471,6 +527,7 @@ func _disparar() -> void:
 		_anim_play("cuchillada", 0.1, true, largo / dur if largo > 0.2 else 1.0)
 		accion = dur
 		_golpe_cuerpo(info)
+		_alertar_enemigos()
 		return
 	_anim_play("disparar", 0.05, true)
 	disparo_timer = 0.22
@@ -479,9 +536,10 @@ func _disparar() -> void:
 
 
 func _alertar_enemigos() -> void:
+	# el ruido del disparo pone en alerta a los enemigos que estén bastante cerca.
 	for e in get_tree().get_nodes_in_group("enemigo"):
 		if is_instance_valid(e) and e.has_method("alertar") \
-				and e.global_position.distance_to(global_position) <= ruido_disparo:
+				and e.global_position.distance_to(global_position) <= 11.0:
 			e.alertar(global_position, false)
 
 

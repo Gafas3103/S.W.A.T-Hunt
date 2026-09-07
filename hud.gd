@@ -1,27 +1,37 @@
 extends CanvasLayer
+## HUD tactico de S.W.A.T Hunter.
+##
+## Se dibuja entero por codigo a partir de la configuracion de abajo, asi
+## que para cambiar su aspecto NO hace falta tocar la escena: selecciona el
+## nodo "HUD" en el arbol, abre el Inspector y ajusta los grupos.
+## Tras cambiar un valor, vuelve a lanzar la escena (F5) para verlo.
+##
+## Escucha estas senales del jugador (scripts/player.gd):
+##   vida_cambiada, municion_cambiada, arma_cambiada, apuntando_cambiado,
+##   agachado_cambiado, llave_cambiada, aviso_cambiado, nota_abierta,
+##   nota_cerrada, jugador_murio, enemigo_abatido, impacto
 
 @export_group("Elementos visibles")
 @export var mostrar_vida := true
 @export var mostrar_arma := true
 @export var mostrar_bajas := true
 @export var mostrar_objetivo := true
-@export var mostrar_mira := true
+@export var mostrar_mira := true                 ## la mira siempre visible (también sin apuntar)
 @export var mostrar_vineta_dano := true
-@export var mostrar_estado := true
 
 @export_group("Mira")
 @export var mira_largo := 9.0
 @export var mira_grosor := 2.0
-@export var mira_hueco := 9.0
-@export var mira_hueco_apuntando := 3.0
-@export var mira_color := Color(0.9, 1.0, 0.95, 0.95)
-@export var mira_color_cadera := Color(0.85, 0.9, 0.9, 0.5)
+@export var mira_hueco := 9.0                    ## abertura disparando desde la cadera
+@export var mira_hueco_apuntando := 3.0          ## abertura al apuntar (más precisa)
+@export var mira_color := Color(0.9, 1.0, 0.95, 0.95)     ## al apuntar
+@export var mira_color_cadera := Color(0.85, 0.9, 0.9, 0.5) ## sin apuntar (más tenue)
 @export var mira_punto_central := true
 
 @export_group("Colores")
 @export var color_texto := Color(0.92, 0.95, 0.96)
 @export var color_apagado := Color(0.55, 0.58, 0.6)
-@export var color_acento := Color(0.95, 0.75, 0.2)
+@export var color_acento := Color(0.95, 0.75, 0.2)          ## amarillo tactico
 @export var color_vida_ok := Color(0.35, 0.82, 0.45)
 @export var color_vida_media := Color(0.95, 0.72, 0.2)
 @export var color_vida_baja := Color(0.9, 0.27, 0.24)
@@ -41,21 +51,24 @@ extends CanvasLayer
 var _jugador: Node
 var _raiz: Control
 
+# vida
 var _vida_barra: ProgressBar
 var _vida_num: Label
 var _vida_previa := 100
-var _estado_txt: Label
 
+# arma
 var _arma_nombre: Label
 var _arma_cargador: Label
 var _arma_reserva: Label
 var _pips: Array[Label] = []
 
+# marcador / objetivo
 var _bajas_num: Label
 var _objetivo_txt: Label
 var _llave_pip: Label
 var _bajas := 0
 
+# mira + hitmarker
 var _mira: Control
 var _punto: ColorRect
 var _lineas: Array[ColorRect] = []
@@ -63,12 +76,14 @@ var _marca: Control
 var _marca_t := 0.0
 var _apuntando := false
 
+# avisos y nota
 var _aviso: PanelContainer
 var _aviso_txt: Label
 var _nota_capa: Control
 var _nota_titulo: Label
 var _nota_cuerpo: Label
 
+# dano / muerte
 var _vineta: TextureRect
 var _flash := 0.0
 var _vida_frac := 1.0
@@ -76,6 +91,7 @@ var _muerte_capa: Control
 var _muerto := false
 var _reloj := 0.0
 
+# pausa
 var _pausa_capa: Control
 var _pausa_opciones: Control
 var _pausa_visible := false
@@ -83,6 +99,7 @@ var _sens_base := 0.0
 
 
 func _ready() -> void:
+	# el HUD sigue funcionando aunque el juego esté en pausa (para el menú)
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	reconstruir()
 
@@ -106,6 +123,7 @@ func _input(evento: InputEvent) -> void:
 			get_tree().reload_current_scene()
 		return
 	if evento.is_action_pressed("pausa"):
+		# si está leyendo la nota, que la cierre el jugador (no abrimos menú)
 		if _jugador != null and _jugador.get("leyendo") == true:
 			return
 		if _pausa_visible:
@@ -136,25 +154,30 @@ func _process(delta: float) -> void:
 		return
 	_reloj += delta
 
+	# viñeta de daño: destello al recibir golpe + pulso al estar bajo de vida
 	if _flash > 0.0:
-		_flash = maxf(0.0, _flash - delta * 3.2)
+		_flash = maxf(0.0, _flash - delta * 2.2)
 	var pulso := 0.0
 	if _vida_frac <= 0.3 and not _muerto:
 		pulso = 0.22 + 0.12 * sin(_reloj * 7.0)
 	if _vineta != null:
 		_vineta.modulate.a = clampf(maxf(_flash, pulso), 0.0, 1.0)
 
+	# hitmarker
 	if _marca_t > 0.0:
 		_marca_t = maxf(0.0, _marca_t - delta)
 		if _marca != null:
 			_marca.modulate.a = _marca_t / 0.35
 			_marca.scale = Vector2.ONE * lerpf(1.35, 1.0, _marca_t / 0.35)
 
+	# pantalla de muerte
 	if _muerte_capa != null:
 		var objetivo := 1.0 if _muerto else 0.0
 		_muerte_capa.modulate.a = lerpf(_muerte_capa.modulate.a, objetivo, delta * 4.0)
 		_muerte_capa.visible = _muerte_capa.modulate.a > 0.01
 
+
+# ─────────────────────────────────────────── construccion
 
 func _construir_ui() -> void:
 	_raiz = Control.new()
@@ -202,7 +225,7 @@ func _construir_vida() -> void:
 	panel.offset_left = margen
 	panel.offset_right = margen + 264
 	panel.offset_bottom = -margen
-	panel.offset_top = -margen - 92
+	panel.offset_top = -margen - 70
 	panel.visible = mostrar_vida
 	_raiz.add_child(panel)
 
@@ -227,10 +250,6 @@ func _construir_vida() -> void:
 	_vida_barra.value = 100
 	_estilo_barra(color_vida_ok)
 	col.add_child(_vida_barra)
-
-	_estado_txt = _label("", fuente_micro, color_acento)
-	_estado_txt.visible = mostrar_estado
-	col.add_child(_estado_txt)
 
 
 func _construir_arma() -> void:
@@ -467,6 +486,7 @@ func _construir_pausa() -> void:
 		get_tree().reload_current_scene()))
 	caja.add_child(_boton("Salir del juego", func(): get_tree().quit()))
 
+	# --- subpanel de opciones ---
 	_pausa_opciones = _panel()
 	_pausa_opciones.mouse_filter = Control.MOUSE_FILTER_STOP
 	_pausa_opciones.set_anchors_preset(Control.PRESET_CENTER)
@@ -482,7 +502,7 @@ func _construir_pausa() -> void:
 	_pausa_opciones.add_child(op)
 	op.add_child(_label("OPCIONES", fuente_normal, color_texto, HORIZONTAL_ALIGNMENT_CENTER))
 
-	op.add_child(_label("Sensibilidad del raton", fuente_micro, color_apagado))
+	op.add_child(_label("Sensibilidad del ratón", fuente_micro, color_apagado))
 	var sens := HSlider.new()
 	sens.min_value = 0.3
 	sens.max_value = 2.5
@@ -531,6 +551,8 @@ func _boton(texto: String, accion: Callable) -> Button:
 	return b
 
 
+# ─────────────────────────────────────────── helpers
+
 func _panel() -> PanelContainer:
 	var p := PanelContainer.new()
 	var e := StyleBoxFlat.new()
@@ -575,18 +597,19 @@ func _estilo_barra(relleno: Color) -> void:
 	_vida_barra.add_theme_stylebox_override("fill", lleno)
 
 
+# ─────────────────────────────────────────── conexion
+
 func _conectar_jugador() -> void:
 	_jugador = get_node_or_null(jugador_path) if jugador_path != NodePath("") else null
 	if _jugador == null:
 		_jugador = get_tree().get_first_node_in_group("jugador")
 	if _jugador == null:
-		push_warning("HUD: no se encontro al jugador. Asigna 'Jugador Path' en el Inspector.")
+		push_warning("HUD: no encontre al jugador. Asigna 'Jugador Path' en el Inspector.")
 		return
 	_atar("vida_cambiada", _on_vida)
 	_atar("municion_cambiada", _on_municion)
 	_atar("arma_cambiada", _on_arma)
 	_atar("apuntando_cambiado", _on_apuntar)
-	_atar("agachado_cambiado", _on_agachado)
 	_atar("llave_cambiada", _on_llave)
 	_atar("aviso_cambiado", _on_aviso)
 	_atar("nota_abierta", _on_nota_abierta)
@@ -603,10 +626,12 @@ func _atar(senal: String, funcion: Callable) -> void:
 		_jugador.connect(senal, funcion)
 
 
+# ─────────────────────────────────────────── reacciones
+
 func _on_vida(actual: int, maxima: int) -> void:
 	_vida_frac = float(actual) / maxf(1.0, float(maxima))
 	if actual < _vida_previa:
-		_flash = 0.8
+		_flash = 1.0
 	_vida_previa = actual
 	_vida_barra.max_value = maxima
 	_vida_barra.value = actual
@@ -639,11 +664,6 @@ func _on_arma(nombre: String, indice: int) -> void:
 func _on_apuntar(activo: bool) -> void:
 	_apuntando = activo
 	_actualizar_mira(activo)
-
-
-func _on_agachado(activo: bool) -> void:
-	if _estado_txt != null:
-		_estado_txt.text = "AGACHADO" if activo else ""
 
 
 func _on_llave(tiene: bool) -> void:

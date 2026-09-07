@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://bq83sgwcyqhqr"]
+
+[ext_resource type="Script" uid="uid://xt63brvq1tet" path="res://scripts/puerta_candado.gd" id="1_s1ng2"]
+[ext_resource type="PackedScene" uid="uid://4sd22cnjrcvj" path="res://assets3d/props/candado/candado.fbx" id="2_tdr26"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_hoja"]
+size = Vector3(2, 2.5, 0.25)
+
+[sub_resource type="StandardMaterial3D" id="Mat_puerta"]
+albedo_color = Color(0.29, 0.19, 0.12, 1)
+roughness = 0.9
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hoja"]
+size = Vector3(2, 2.4, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_zona"]
+size = Vector3(3.5, 2.5, 3.5)
+
+[node name="Puerta" type="Node3D" unique_id=759643513]
+script = ExtResource("1_s1ng2")
+
+[node name="Hoja" type="StaticBody3D" parent="." unique_id=1157914438]
+
+[node name="Malla" type="MeshInstance3D" parent="Hoja" unique_id=1803834211]
+mesh = SubResource("BoxMesh_hoja")
+surface_material_override/0 = SubResource("Mat_puerta")
+
+[node name="Colision" type="CollisionShape3D" parent="Hoja" unique_id=551810832]
+shape = SubResource("BoxShape3D_hoja")
+
+[node name="Candado" parent="." unique_id=1042143011 instance=ExtResource("2_tdr26")]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0.7304809, 0.050870776, 0.09)
+
+[node name="Zona" type="Area3D" parent="." unique_id=36431722]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.2, 0)
+collision_layer = 0
+
+[node name="Colision" type="CollisionShape3D" parent="Zona" unique_id=1213613143]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9868293, -0.7577934, 0)
+shape = SubResource("BoxShape3D_zona")

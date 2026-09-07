@@ -1,10 +1,10 @@
-[gd_scene format=3]
+[gd_scene load_steps=11 format=3]
 
-[ext_resource type="Script" uid="uid://u7om2eb11b13" path="res://scripts/player.gd" id="1_jug"]
-[ext_resource type="Script" uid="uid://cqgnvqspbkllw" path="res://scripts/armas.gd" id="2_arm"]
-[ext_resource type="PackedScene" uid="uid://buhcgi5mkgkut" path="res://assets3d/player/character.fbx" id="3_pj"]
-[ext_resource type="PackedScene" uid="uid://cdwja3lnx1pxw" path="res://assets3d/armas/hk416/hk416.fbx" id="4_hk"]
-[ext_resource type="PackedScene" uid="uid://beb8iv0qnmuxm" path="res://assets3d/armas/pistola/pistola.fbx" id="5_pis"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_jug"]
+[ext_resource type="Script" path="res://scripts/armas.gd" id="2_arm"]
+[ext_resource type="PackedScene" path="res://assets3d/character.fbx" id="3_pj"]
+[ext_resource type="PackedScene" path="res://assets3d/armas/hk416/hk416.fbx" id="4_hk"]
+[ext_resource type="PackedScene" path="res://assets3d/armas/pistola/pistola.fbx" id="5_pis"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jug"]
 radius = 0.35

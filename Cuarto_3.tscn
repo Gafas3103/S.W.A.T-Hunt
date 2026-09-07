@@ -2,12 +2,11 @@
 
 [ext_resource type="Texture2D" uid="uid://bw4jwpkckvccx" path="res://assets3d/Mapa/Bricks_17-128x128.png" id="1_0pvsg"]
 [ext_resource type="Texture2D" uid="uid://cgq8jqb7hps78" path="res://assets3d/Mapa/Tile_10-128x128.png" id="2_8hqrg"]
-[ext_resource type="PackedScene" uid="uid://bq83sgwcyqhqr" path="res://escenas/puerta.tscn" id="3_m2mbw"]
+[ext_resource type="PackedScene" uid="uid://bq83sgwcyqhqr" path="res://escenas/puerta_candado.tscn" id="3_m2mbw"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hyxcp"]
 albedo_texture = ExtResource("1_0pvsg")
-uv1_scale = Vector3(1, 1, 1)
-uv1_triplanar = true
+uv1_scale = Vector3(18.5, 3, 0.5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_ticvn"]
 material = SubResource("StandardMaterial3D_hyxcp")
@@ -18,8 +17,7 @@ size = Vector3(18.5, 3, 0.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ai1ps"]
 albedo_texture = ExtResource("1_0pvsg")
-uv1_scale = Vector3(1, 1, 1)
-uv1_triplanar = true
+uv1_scale = Vector3(18.5, 1, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_cdmtq"]
 material = SubResource("StandardMaterial3D_ai1ps")
@@ -30,8 +28,7 @@ size = Vector3(18.5, 3, 0.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6so4e"]
 albedo_texture = ExtResource("1_0pvsg")
-uv1_scale = Vector3(1, 1, 1)
-uv1_triplanar = true
+uv1_scale = Vector3(16.5, 3, 0.5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_3g1m8"]
 material = SubResource("StandardMaterial3D_6so4e")
@@ -42,8 +39,7 @@ size = Vector3(16.5, 3, 0.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m18c8"]
 albedo_texture = ExtResource("1_0pvsg")
-uv1_scale = Vector3(1, 1, 1)
-uv1_triplanar = true
+uv1_scale = Vector3(7, 3, 0.5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_t35bo"]
 material = SubResource("StandardMaterial3D_m18c8")
@@ -54,8 +50,7 @@ size = Vector3(7, 3, 0.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ojvp2"]
 albedo_texture = ExtResource("1_0pvsg")
-uv1_scale = Vector3(1, 1, 1)
-uv1_triplanar = true
+uv1_scale = Vector3(7, 3, 0.5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_ai1ps"]
 material = SubResource("StandardMaterial3D_ojvp2")
@@ -66,8 +61,7 @@ size = Vector3(7, 3, 0.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_djguw"]
 albedo_texture = ExtResource("2_8hqrg")
-uv1_scale = Vector3(1, 1, 1)
-uv1_triplanar = true
+uv1_scale = Vector3(16, 4, 18.5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_ojvp2"]
 material = SubResource("StandardMaterial3D_djguw")

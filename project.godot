@@ -22,6 +22,10 @@ window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[dotnet]
+
+project/assembly_name="S.W.A.T Hunter"
+
 [input]
 
 move_left={

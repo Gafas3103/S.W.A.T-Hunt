@@ -1,0 +1,90 @@
+[gd_scene load_steps=7 format=3]
+
+[sub_resource type="BoxMesh" id="BoxMesh_caja"]
+size = Vector3(1.1, 1, 1.1)
+[sub_resource type="BoxMesh" id="BoxMesh_mesa"]
+size = Vector3(1.5, 1.05, 1.5)
+[sub_resource type="StandardMaterial3D" id="Mat_madera"]
+albedo_color = Color(0.42, 0.31, 0.18, 1)
+roughness = 0.85
+[sub_resource type="StandardMaterial3D" id="Mat_madera_osc"]
+albedo_color = Color(0.24, 0.17, 0.1, 1)
+roughness = 0.9
+[sub_resource type="BoxShape3D" id="Shape_caja"]
+size = Vector3(1.1, 1, 1.1)
+[sub_resource type="BoxShape3D" id="Shape_mesa"]
+size = Vector3(1.5, 1.05, 1.5)
+
+[node name="Cobertura" type="Node3D"]
+
+[node name="Mesa" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Mesa"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.8, 0.575, 11)
+mesh = SubResource("BoxMesh_mesa")
+surface_material_override/0 = SubResource("Mat_madera_osc")
+[node name="Colision" type="CollisionShape3D" parent="Mesa"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.8, 0.575, 11)
+shape = SubResource("Shape_mesa")
+
+[node name="Caja1" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Caja1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8, 0.55, 5.5)
+mesh = SubResource("BoxMesh_caja")
+surface_material_override/0 = SubResource("Mat_madera")
+[node name="Colision" type="CollisionShape3D" parent="Caja1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8, 0.55, 5.5)
+shape = SubResource("Shape_caja")
+
+[node name="Caja2" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Caja2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.55, 6)
+mesh = SubResource("BoxMesh_caja")
+surface_material_override/0 = SubResource("Mat_madera")
+[node name="Colision" type="CollisionShape3D" parent="Caja2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.55, 6)
+shape = SubResource("Shape_caja")
+
+[node name="Caja3" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Caja3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.8, 0.55, 9)
+mesh = SubResource("BoxMesh_caja")
+surface_material_override/0 = SubResource("Mat_madera")
+[node name="Colision" type="CollisionShape3D" parent="Caja3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.8, 0.55, 9)
+shape = SubResource("Shape_caja")
+
+[node name="Caja4" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Caja4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6, 0.55, 24)
+mesh = SubResource("BoxMesh_caja")
+surface_material_override/0 = SubResource("Mat_madera")
+[node name="Colision" type="CollisionShape3D" parent="Caja4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6, 0.55, 24)
+shape = SubResource("Shape_caja")
+
+[node name="Caja5" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Caja5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.6, 0.55, 8)
+mesh = SubResource("BoxMesh_caja")
+surface_material_override/0 = SubResource("Mat_madera")
+[node name="Colision" type="CollisionShape3D" parent="Caja5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.6, 0.55, 8)
+shape = SubResource("Shape_caja")
+
+[node name="Caja6" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Caja6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.8, 0.55, -2.68)
+mesh = SubResource("BoxMesh_caja")
+surface_material_override/0 = SubResource("Mat_madera")
+[node name="Colision" type="CollisionShape3D" parent="Caja6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.8, 0.55, -2.68)
+shape = SubResource("Shape_caja")
+
+[node name="Caja7" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Caja7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.08, 0.55, 4.5)
+mesh = SubResource("BoxMesh_caja")
+surface_material_override/0 = SubResource("Mat_madera")
+[node name="Colision" type="CollisionShape3D" parent="Caja7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.08, 0.55, 4.5)
+shape = SubResource("Shape_caja")
