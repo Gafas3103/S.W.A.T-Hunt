@@ -19,6 +19,8 @@ func _process(delta: float) -> void:
 
 
 func _al_entrar(cuerpo: Node3D) -> void:
+	if not visible:
+		return
 	if cuerpo.is_in_group("jugador") and cuerpo.has_method("fijar_interaccion"):
 		cuerpo.fijar_interaccion(self, aviso)
 
