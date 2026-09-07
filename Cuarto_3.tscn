@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bw4jwpkckvccx" path="res://assets3d/Mapa/Bricks_17-128x128.png" id="1_0pvsg"]
 [ext_resource type="Texture2D" uid="uid://cgq8jqb7hps78" path="res://assets3d/Mapa/Tile_10-128x128.png" id="2_8hqrg"]
-[ext_resource type="PackedScene" uid="uid://bq83sgwcyqhqr" path="res://escenas/puerta.tscn" id="3_m2mbw"]
+[ext_resource type="PackedScene" uid="uid://bq83sgwcyqhqr" path="res://escenas/puerta_candado.tscn" id="3_m2mbw"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hyxcp"]
 albedo_texture = ExtResource("1_0pvsg")

@@ -3,9 +3,10 @@
 [ext_resource type="PackedScene" path="res://escenas/jugador.tscn" id="1_jug"]
 [ext_resource type="PackedScene" path="res://escenas/enemigo.tscn" id="2_ene"]
 [ext_resource type="PackedScene" path="res://escenas/nota.tscn" id="3_not"]
-[ext_resource type="PackedScene" path="res://escenas/puerta.tscn" id="4_pue"]
+[ext_resource type="PackedScene" uid="uid://bq83sgwcyqhqr" path="res://escenas/puerta_candado.tscn" id="4_pue"]
 [ext_resource type="PackedScene" path="res://escenas/llave.tscn" id="5_lla"]
 [ext_resource type="PackedScene" path="res://hud.tscn" id="6_hud"]
+[ext_resource type="PackedScene" uid="uid://c4p16rsxosl2o" path="res://Mapa.tscn" id="8_70khi"]
 
 [sub_resource type="ProceduralSkyMaterial" id="Cielo_mat"]
 sky_top_color = Color(0.36, 0.45, 0.6, 1)
@@ -22,132 +23,6 @@ sky = SubResource("Cielo")
 ambient_light_source = 3
 ambient_light_energy = 0.6
 
-[sub_resource type="BoxMesh" id="BM_suelo"]
-size = Vector3(60, 0.4, 60)
-
-[sub_resource type="StandardMaterial3D" id="Mat_suelo"]
-albedo_color = Color(0.34, 0.33, 0.31, 1)
-roughness = 0.95
-
-[sub_resource type="BoxShape3D" id="BS_suelo"]
-size = Vector3(60, 0.4, 60)
-
-[sub_resource type="BoxMesh" id="BM_1"]
-size = Vector3(24.3, 3, 0.3)
-
-[sub_resource type="StandardMaterial3D" id="Mat_muro"]
-albedo_color = Color(0.64, 0.6, 0.51, 1)
-roughness = 0.9
-
-[sub_resource type="BoxShape3D" id="BS_1"]
-size = Vector3(24.3, 3, 0.3)
-
-[sub_resource type="BoxMesh" id="BM_2"]
-size = Vector3(10.5, 3, 0.3)
-
-[sub_resource type="BoxShape3D" id="BS_2"]
-size = Vector3(10.5, 3, 0.3)
-
-[sub_resource type="BoxMesh" id="BM_3"]
-size = Vector3(10.5, 3, 0.3)
-
-[sub_resource type="BoxShape3D" id="BS_3"]
-size = Vector3(10.5, 3, 0.3)
-
-[sub_resource type="BoxMesh" id="BM_4"]
-size = Vector3(0.3, 3, 18)
-
-[sub_resource type="BoxShape3D" id="BS_4"]
-size = Vector3(0.3, 3, 18)
-
-[sub_resource type="BoxMesh" id="BM_5"]
-size = Vector3(0.3, 3, 18)
-
-[sub_resource type="BoxShape3D" id="BS_5"]
-size = Vector3(0.3, 3, 18)
-
-[sub_resource type="BoxMesh" id="BM_6"]
-size = Vector3(15.5, 3, 0.3)
-
-[sub_resource type="BoxShape3D" id="BS_6"]
-size = Vector3(15.5, 3, 0.3)
-
-[sub_resource type="BoxMesh" id="BM_7"]
-size = Vector3(6.5, 3, 0.3)
-
-[sub_resource type="BoxShape3D" id="BS_7"]
-size = Vector3(6.5, 3, 0.3)
-
-[sub_resource type="BoxMesh" id="BM_8"]
-size = Vector3(0.3, 3, 7.5)
-
-[sub_resource type="BoxShape3D" id="BS_8"]
-size = Vector3(0.3, 3, 7.5)
-
-[sub_resource type="BoxMesh" id="BM_9"]
-size = Vector3(0.3, 3, 6.5)
-
-[sub_resource type="BoxShape3D" id="BS_9"]
-size = Vector3(0.3, 3, 6.5)
-
-[sub_resource type="BoxMesh" id="BM_10"]
-size = Vector3(1.2, 1.2, 1.2)
-
-[sub_resource type="StandardMaterial3D" id="Mat_caja"]
-albedo_color = Color(0.42, 0.29, 0.16, 1)
-roughness = 0.85
-
-[sub_resource type="BoxShape3D" id="BS_10"]
-size = Vector3(1.2, 1.2, 1.2)
-
-[sub_resource type="BoxMesh" id="BM_11"]
-size = Vector3(0.8, 0.8, 0.8)
-
-[sub_resource type="BoxShape3D" id="BS_11"]
-size = Vector3(0.8, 0.8, 0.8)
-
-[sub_resource type="BoxMesh" id="BM_12"]
-size = Vector3(1.2, 1.2, 1.2)
-
-[sub_resource type="BoxShape3D" id="BS_12"]
-size = Vector3(1.2, 1.2, 1.2)
-
-[sub_resource type="BoxMesh" id="BM_13"]
-size = Vector3(0.9, 0.6, 0.9)
-
-[sub_resource type="BoxShape3D" id="BS_13"]
-size = Vector3(0.9, 0.6, 0.9)
-
-[sub_resource type="BoxMesh" id="BM_14"]
-size = Vector3(1.2, 1.2, 1.2)
-
-[sub_resource type="BoxShape3D" id="BS_14"]
-size = Vector3(1.2, 1.2, 1.2)
-
-[sub_resource type="BoxMesh" id="BM_15"]
-size = Vector3(1.4, 1.2, 1.2)
-
-[sub_resource type="BoxShape3D" id="BS_15"]
-size = Vector3(1.4, 1.2, 1.2)
-
-[sub_resource type="BoxMesh" id="BM_16"]
-size = Vector3(1.2, 1.2, 1.2)
-
-[sub_resource type="BoxShape3D" id="BS_16"]
-size = Vector3(1.2, 1.2, 1.2)
-
-[sub_resource type="BoxMesh" id="BM_17"]
-size = Vector3(1.2, 1.2, 1.2)
-
-[sub_resource type="BoxShape3D" id="BS_17"]
-size = Vector3(1.2, 1.2, 1.2)
-
-[sub_resource type="BoxMesh" id="BM_18"]
-size = Vector3(1.2, 1.2, 1.2)
-
-[sub_resource type="BoxShape3D" id="BS_18"]
-size = Vector3(1.2, 1.2, 1.2)
-
 [node name="Nivel1" type="Node3D" unique_id=2115043807]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1843281245]
@@ -158,226 +33,34 @@ transform = Transform3D(0.766044, -0.383022, 0.51503, 0, 0.803857, 0.594823, -0.
 light_energy = 1.15
 shadow_enabled = true
 
-[node name="Suelo" type="StaticBody3D" parent="." unique_id=1823011113]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
-
-[node name="Malla" type="MeshInstance3D" parent="Suelo" unique_id=216442626]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.122470856, -0.09704588, -0.0064907074)
-mesh = SubResource("BM_suelo")
-surface_material_override/0 = SubResource("Mat_suelo")
-
-[node name="Colision" type="CollisionShape3D" parent="Suelo" unique_id=195878765]
-shape = SubResource("BS_suelo")
-
-[node name="Edificio" type="Node3D" parent="." unique_id=1966634495]
-
-[node name="Norte" type="StaticBody3D" parent="Edificio" unique_id=1943052188]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -9)
-
-[node name="Malla" type="MeshInstance3D" parent="Edificio/Norte" unique_id=555708042]
-mesh = SubResource("BM_1")
-surface_material_override/0 = SubResource("Mat_muro")
-
-[node name="Colision" type="CollisionShape3D" parent="Edificio/Norte" unique_id=1154334781]
-shape = SubResource("BS_1")
-
-[node name="SurOeste" type="StaticBody3D" parent="Edificio" unique_id=1473948808]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.75, 1.5, 9)
-
-[node name="Malla" type="MeshInstance3D" parent="Edificio/SurOeste" unique_id=1049180065]
-mesh = SubResource("BM_2")
-surface_material_override/0 = SubResource("Mat_muro")
-
-[node name="Colision" type="CollisionShape3D" parent="Edificio/SurOeste" unique_id=411835623]
-shape = SubResource("BS_2")
-
-[node name="SurEste" type="StaticBody3D" parent="Edificio" unique_id=929811205]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.75, 1.5, 9)
-
-[node name="Malla" type="MeshInstance3D" parent="Edificio/SurEste" unique_id=1359768401]
-mesh = SubResource("BM_3")
-surface_material_override/0 = SubResource("Mat_muro")
-
-[node name="Colision" type="CollisionShape3D" parent="Edificio/SurEste" unique_id=2039970396]
-shape = SubResource("BS_3")
-
-[node name="Oeste" type="StaticBody3D" parent="Edificio" unique_id=1575108344]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 1.5, 0)
-
-[node name="Malla" type="MeshInstance3D" parent="Edificio/Oeste" unique_id=1161464798]
-mesh = SubResource("BM_4")
-surface_material_override/0 = SubResource("Mat_muro")
-
-[node name="Colision" type="CollisionShape3D" parent="Edificio/Oeste" unique_id=438787022]
-shape = SubResource("BS_4")
-
-[node name="Este" type="StaticBody3D" parent="Edificio" unique_id=2064175206]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1.5, 0)
-
-[node name="Malla" type="MeshInstance3D" parent="Edificio/Este" unique_id=1347929954]
-mesh = SubResource("BM_5")
-surface_material_override/0 = SubResource("Mat_muro")
-
-[node name="Colision" type="CollisionShape3D" parent="Edificio/Este" unique_id=1626932149]
-shape = SubResource("BS_5")
-
-[node name="DivisorOeste" type="StaticBody3D" parent="Edificio" unique_id=1494581218]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.25, 1.5, 0)
-
-[node name="Malla" type="MeshInstance3D" parent="Edificio/DivisorOeste" unique_id=1005776436]
-mesh = SubResource("BM_6")
-surface_material_override/0 = SubResource("Mat_muro")
-
-[node name="Colision" type="CollisionShape3D" parent="Edificio/DivisorOeste" unique_id=1340362185]
-shape = SubResource("BS_6")
-
-[node name="DivisorEste" type="StaticBody3D" parent="Edificio" unique_id=1476399401]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.75, 1.5, 0)
-
-[node name="Malla" type="MeshInstance3D" parent="Edificio/DivisorEste" unique_id=1738500785]
-mesh = SubResource("BM_7")
-surface_material_override/0 = SubResource("Mat_muro")
-
-[node name="Colision" type="CollisionShape3D" parent="Edificio/DivisorEste" unique_id=316406783]
-shape = SubResource("BS_7")
-
-[node name="SalaOeste" type="StaticBody3D" parent="Edificio" unique_id=176949433]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1.5, 5.25)
-
-[node name="Malla" type="MeshInstance3D" parent="Edificio/SalaOeste" unique_id=81250134]
-mesh = SubResource("BM_8")
-surface_material_override/0 = SubResource("Mat_muro")
-
-[node name="Colision" type="CollisionShape3D" parent="Edificio/SalaOeste" unique_id=1454450223]
-shape = SubResource("BS_8")
-
-[node name="SalaTrasera" type="StaticBody3D" parent="Edificio" unique_id=1922448114]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.5, -5.75)
-
-[node name="Malla" type="MeshInstance3D" parent="Edificio/SalaTrasera" unique_id=2118341928]
-mesh = SubResource("BM_9")
-surface_material_override/0 = SubResource("Mat_muro")
-
-[node name="Colision" type="CollisionShape3D" parent="Edificio/SalaTrasera" unique_id=23311232]
-shape = SubResource("BS_9")
-
-[node name="Caja1" type="StaticBody3D" parent="Edificio" unique_id=1530191206]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.6, 6)
-
-[node name="Malla" type="MeshInstance3D" parent="Edificio/Caja1" unique_id=1510664763]
-mesh = SubResource("BM_10")
-surface_material_override/0 = SubResource("Mat_caja")
-
-[node name="Colision" type="CollisionShape3D" parent="Edificio/Caja1" unique_id=1287107934]
-shape = SubResource("BS_10")
-
-[node name="Caja2" type="StaticBody3D" parent="Edificio" unique_id=767586921]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.9, 0.4, 6.9)
-
-[node name="Malla" type="MeshInstance3D" parent="Edificio/Caja2" unique_id=966626117]
-mesh = SubResource("BM_11")
-surface_material_override/0 = SubResource("Mat_caja")
-
-[node name="Colision" type="CollisionShape3D" parent="Edificio/Caja2" unique_id=369877900]
-shape = SubResource("BS_11")
-
-[node name="Caja3" type="StaticBody3D" parent="Edificio" unique_id=991884928]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.6, 3)
-
-[node name="Malla" type="MeshInstance3D" parent="Edificio/Caja3" unique_id=1693138503]
-mesh = SubResource("BM_12")
-surface_material_override/0 = SubResource("Mat_caja")
-
-[node name="Colision" type="CollisionShape3D" parent="Edificio/Caja3" unique_id=214168121]
-shape = SubResource("BS_12")
-
-[node name="Caja4" type="StaticBody3D" parent="Edificio" unique_id=1021971557]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1.5, 3)
-
-[node name="Malla" type="MeshInstance3D" parent="Edificio/Caja4" unique_id=1909543220]
-mesh = SubResource("BM_13")
-surface_material_override/0 = SubResource("Mat_caja")
-
-[node name="Colision" type="CollisionShape3D" parent="Edificio/Caja4" unique_id=1664754077]
-shape = SubResource("BS_13")
-
-[node name="Caja5" type="StaticBody3D" parent="Edificio" unique_id=1192144525]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.6, -5)
-
-[node name="Malla" type="MeshInstance3D" parent="Edificio/Caja5" unique_id=1031576912]
-mesh = SubResource("BM_14")
-surface_material_override/0 = SubResource("Mat_caja")
-
-[node name="Colision" type="CollisionShape3D" parent="Edificio/Caja5" unique_id=459221412]
-shape = SubResource("BS_14")
-
-[node name="Caja6" type="StaticBody3D" parent="Edificio" unique_id=1860670681]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.6, -6)
-
-[node name="Malla" type="MeshInstance3D" parent="Edificio/Caja6" unique_id=1985348900]
-mesh = SubResource("BM_15")
-surface_material_override/0 = SubResource("Mat_caja")
-
-[node name="Colision" type="CollisionShape3D" parent="Edificio/Caja6" unique_id=186208005]
-shape = SubResource("BS_15")
-
-[node name="Caja7" type="StaticBody3D" parent="Edificio" unique_id=952623944]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0.6, 6.5)
-
-[node name="Malla" type="MeshInstance3D" parent="Edificio/Caja7" unique_id=349067053]
-mesh = SubResource("BM_16")
-surface_material_override/0 = SubResource("Mat_caja")
-
-[node name="Colision" type="CollisionShape3D" parent="Edificio/Caja7" unique_id=1537568731]
-shape = SubResource("BS_16")
-
-[node name="Caja8" type="StaticBody3D" parent="Edificio" unique_id=507808191]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 0.6, -3)
-
-[node name="Malla" type="MeshInstance3D" parent="Edificio/Caja8" unique_id=490684607]
-mesh = SubResource("BM_17")
-surface_material_override/0 = SubResource("Mat_caja")
-
-[node name="Colision" type="CollisionShape3D" parent="Edificio/Caja8" unique_id=792453500]
-shape = SubResource("BS_17")
-
-[node name="Caja9" type="StaticBody3D" parent="Edificio" unique_id=988827658]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.6, 7)
-
-[node name="Malla" type="MeshInstance3D" parent="Edificio/Caja9" unique_id=1657486983]
-mesh = SubResource("BM_18")
-surface_material_override/0 = SubResource("Mat_caja")
-
-[node name="Colision" type="CollisionShape3D" parent="Edificio/Caja9" unique_id=1436316182]
-shape = SubResource("BS_18")
-
 [node name="Puerta" parent="." unique_id=185717999 instance=ExtResource("4_pue")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, 0)
+visible = false
 
 [node name="Jugador" parent="." unique_id=552160670 instance=ExtResource("1_jug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 6.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.831439, 1.6791807, 27.730793)
 
 [node name="Enemigos" type="Node3D" parent="." unique_id=2045622482]
 
 [node name="Enemigo1" parent="Enemigos" unique_id=772456062 instance=ExtResource("2_ene")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0.1, 4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0.1, -2.6821089)
 
 [node name="Enemigo2" parent="Enemigos" unique_id=1378627756 instance=ExtResource("2_ene")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 0.1, 5.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.661138, 0.1, 6.425891)
 
 [node name="Enemigo3" parent="Enemigos" unique_id=592450492 instance=ExtResource("2_ene")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0.1, 7.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.475061, 0.1, 9.349638)
 
 [node name="Enemigo4" parent="Enemigos" unique_id=388232599 instance=ExtResource("2_ene")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.5, 0.1, 2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.626759, 0.1, 20.56427)
 suelta_llave = true
 escena_llave = ExtResource("5_lla")
 
 [node name="Enemigo5" parent="Enemigos" unique_id=1841240783 instance=ExtResource("2_ene")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.1, -6.5)
+transform = Transform3D(-0.011863355, 0, 0.9999296, 0, 1, 0, -0.9999296, 0, -0.011863355, -14.33442, 0.1, 9.1490345)
 
 [node name="Enemigo6" parent="Enemigos" unique_id=1015161402 instance=ExtResource("2_ene")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.1, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.077639, 0.1, 1.1720781)
 
 [node name="Nota" parent="." unique_id=1201601186 instance=ExtResource("3_not")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1.35, -6)
@@ -395,3 +78,5 @@ Si el sargento aparece por aquí, ya sabe qué hacer.
 
 [node name="HUD" parent="." unique_id=154144943 instance=ExtResource("6_hud")]
 jugador_path = NodePath("../Jugador")
+
+[node name="Mapa" parent="." unique_id=2022714010 instance=ExtResource("8_70khi")]
