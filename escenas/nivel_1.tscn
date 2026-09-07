@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" path="res://escenas/jugador.tscn" id="1_jug"]
 [ext_resource type="PackedScene" path="res://escenas/enemigo.tscn" id="2_ene"]
 [ext_resource type="PackedScene" path="res://escenas/nota.tscn" id="3_not"]
-[ext_resource type="PackedScene" uid="uid://bq83sgwcyqhqr" path="res://escenas/puerta_candado.tscn" id="4_pue"]
 [ext_resource type="PackedScene" path="res://escenas/llave.tscn" id="5_lla"]
 [ext_resource type="PackedScene" path="res://hud.tscn" id="6_hud"]
 [ext_resource type="Script" path="res://scripts/navmap.gd" id="9_nav"]
@@ -36,9 +35,6 @@ shadow_enabled = true
 
 [node name="Navegacion" type="Node3D" parent="." unique_id=2105220801]
 script = ExtResource("9_nav")
-
-[node name="Puerta" parent="." unique_id=185717999 instance=ExtResource("4_pue")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, 0)
 
 [node name="Jugador" parent="." unique_id=552160670 instance=ExtResource("1_jug")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.831439, 1.6791807, 27.730793)
