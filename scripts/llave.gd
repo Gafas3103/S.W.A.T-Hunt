@@ -19,8 +19,6 @@ func _ready() -> void:
 
 
 func _colocar_en_suelo() -> void:
-	# La llave es un Area3D (no le afecta la gravedad): si se suelta desde una
-	# altura, quedaría flotando. La anclamos al suelo con un raycast.
 	var desde := global_position + Vector3.UP
 	var consulta := PhysicsRayQueryParameters3D.create(desde, global_position - Vector3.UP * 8.0)
 	consulta.exclude = [get_rid()]

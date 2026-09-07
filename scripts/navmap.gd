@@ -1,12 +1,4 @@
 extends Node3D
-## Construye el navmesh del nivel en tiempo de ejecución a partir de los
-## suelos (cajas finas) de todos los StaticBody3D. Es determinista, no usa
-## horneado (Recast) ni hilos: cada suelo se convierte en un polígono
-## cuadrilátero sobre su cara superior.
-##
-## Filtro: un BoxShape3D se considera suelo si su alto está entre
-## 'grosor_min' y 'grosor_max' y su centro está a la altura del suelo.
-## Las paredes y puertas (altas) quedan excluidas automáticamente.
 
 @export var grosor_min := 0.04
 @export var grosor_max := 0.55
@@ -51,7 +43,6 @@ func crear_region() -> void:
 	for p in poligonos:
 		malla.add_polygon(p)
 	region.navigation_mesh = malla
-	print("[navegacion] navmesh manual: %d poligonos, %d vertices" % [malla.get_polygon_count(), vertices.size()])
 
 
 func _agregar_superficie(tf: Transform3D, tam: Vector3, vertices: PackedVector3Array, poligonos: Array[PackedInt32Array]) -> void:

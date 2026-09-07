@@ -15,16 +15,16 @@ const CICLICAS := ["quieto", "caminar"]
 @export var dano := 8
 @export var cadencia := 0.95
 @export var rango_vision := 17.0
-@export var angulo_vision := 220.0        ## cono de visión en grados: tiene un punto ciego a la espalda
+@export var angulo_vision := 220.0
 @export var precision := 0.38
 @export var altura_ojos := 1.55
-@export var velocidad := 2.4              ## lo rápido que camina
-@export var distancia_combate := 8.0      ## a esta distancia se planta a disparar
-@export var memoria := 2.5                ## segundos que te sigue buscando tras perderte
-@export var reaccion_min := 0.5           ## lo que tarda en espabilar tras oír algo
+@export var velocidad := 2.4
+@export var distancia_combate := 8.0
+@export var memoria := 2.5
+@export var reaccion_min := 0.5
 @export var reaccion_max := 1.4
-@export var radio_patrulla := 4.0         ## cuánto se aleja de su sitio al vigilar
-@export var radio_aviso := 9.0            ## a qué distancia avisa a un compañero al caer
+@export var radio_patrulla := 4.0
+@export var radio_aviso := 9.0
 @export var suelta_llave := false
 @export var escena_llave: PackedScene
 
@@ -34,6 +34,7 @@ const CICLICAS := ["quieto", "caminar"]
 @onready var arma: Node3D = $Arma
 @onready var colision: CollisionShape3D = $Colision
 @onready var navegante: NavigationAgent3D = $Navegante
+@onready var sangre: GPUParticles3D = $Sangre
 
 var vida := 0
 var jugador: Node3D = null
@@ -43,17 +44,15 @@ var muerto := false
 var animacion_actual := ""
 var _pista := {}
 
-# IA sencilla con 3 estados. Se mueve por el navmesh del nivel: rodea esquinas
-# y persigue por los pasillos en vez de chocar contra las paredes.
-var estado := "patrulla"                 # patrulla | alerta | combate
-var sitio := Vector3.ZERO                # dónde empezó (centro de su patrulla)
-var destino := Vector3.ZERO              # a dónde camina ahora mismo
-var _destino_objetivo := Vector3.ZERO    # punto al que se dirige vía la navegación
-var _retarget := 0.0                     # evita re-pedir ruta cada frame
-var ultima_vista := Vector3.ZERO         # última posición conocida del jugador
+var estado := "patrulla"
+var sitio := Vector3.ZERO
+var destino := Vector3.ZERO
+var _destino_objetivo := Vector3.ZERO
+var _retarget := 0.0
+var ultima_vista := Vector3.ZERO
 var sin_ver := 0.0
 var descanso := 0.0
-var reaccion := 0.0                      # mientras sea mayor que 0 aún está espabilando (no dispara)
+var reaccion := 0.0
 
 
 func _ready() -> void:
@@ -61,7 +60,6 @@ func _ready() -> void:
 	vida = vida_maxima
 	_preparar_animaciones()
 	_montar_arma()
-	_pintar()
 	_pintar_arma()
 	espera = randf_range(0.3, 1.2)
 	jugador = get_tree().get_first_node_in_group("jugador") as Node3D
@@ -106,9 +104,6 @@ func _preparar_animaciones() -> void:
 	_reproducir("quieto", 0.1)
 
 
-## El clip de morir necesita desplomar la cadera hasta el suelo; si lo quitamos
-## entero, el cuerpo queda "flotando". Le dejamos solo el eje Y (el descenso),
-## anulando el avance x/z para que el cadáver no patine.
 func _conservar_desplome(a: Animation, track: int) -> void:
 	for k in range(a.track_get_key_count(track)):
 		var v: Vector3 = a.track_get_key_value(track, k)
@@ -121,16 +116,6 @@ func _montar_arma() -> void:
 	esqueleto.add_child(union)
 	union.bone_name = "mixamorig_RightHand"
 	arma.reparent(union, false)
-
-
-func _pintar() -> void:
-	var tinte := StandardMaterial3D.new()
-	tinte.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	tinte.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	tinte.albedo_color = Color(0.66, 0.14, 0.11, 0.18)
-	for hijo in esqueleto.get_children():
-		if hijo is MeshInstance3D:
-			(hijo as MeshInstance3D).material_overlay = tinte
 
 
 func _pintar_arma() -> void:
@@ -155,8 +140,6 @@ func _repartir_material(nodo: Node, metal: Material, madera: Material) -> void:
 
 func _physics_process(delta: float) -> void:
 	if muerto:
-		# ya no colisiona con el suelo (le quitamos la colisión al morir), así que
-		# si aplicamos gravedad el cuerpo se hunde. Lo dejamos clavado donde cayó.
 		_frenar(delta)
 		velocity.y = 0.0
 		move_and_slide()
@@ -174,11 +157,10 @@ func _physics_process(delta: float) -> void:
 	if jugador == null:
 		jugador = get_tree().get_first_node_in_group("jugador") as Node3D
 
-	# ¿decidimos el estado?
 	if _ve_al_jugador():
 		ultima_vista = jugador.global_position
 		sin_ver = 0.0
-		reaccion = minf(reaccion, 0.15)   # si te ve, deja de dudar casi al instante
+		reaccion = minf(reaccion, 0.15)
 		estado = "combate" if _distancia() <= distancia_combate else "alerta"
 	elif estado != "patrulla":
 		sin_ver += delta
@@ -186,7 +168,6 @@ func _physics_process(delta: float) -> void:
 			estado = "patrulla"
 			_nuevo_destino_patrulla()
 
-	# todavía espabilando: se queda quieto mirando hacia el ruido
 	if reaccion > 0.0:
 		_frenar(delta)
 		_mirar_a(ultima_vista, delta)
@@ -210,13 +191,11 @@ func _hacer_combate(delta: float) -> void:
 	_mirar_a(ultima_vista, delta)
 	var d := _distancia()
 	if d < distancia_combate * 0.5:
-		# le pisa los talones: se retira sin dejar de apuntarle
 		var huida := global_position + (global_position - jugador.global_position)
 		huida.y = global_position.y
 		_destino_objetivo = huida
 		_avanzar(delta, velocidad * 0.7)
 	elif d > distancia_combate * 0.9:
-		# el jugador se aleja: lo persigue sin dejar de vigilarlo
 		_destino_objetivo = ultima_vista
 		_avanzar(delta, velocidad)
 	else:
@@ -226,13 +205,10 @@ func _hacer_combate(delta: float) -> void:
 
 
 func _hacer_alerta(delta: float) -> void:
-	# Si el último punto visto no cae sobre el navmesh, la ruta es vacía y el
-	# enemigo se queda plantado mirando: lo clavamos al punto navegable más
-	# cercano.
 	_destino_objetivo = NavigationServer3D.map_get_closest_point(navegante.get_navigation_map(), ultima_vista)
 	_mirar_a(ultima_vista, delta)
 	if navegante.is_navigation_finished():
-		_frenar(delta)      # llegó a donde lo vio por última vez y mira alrededor
+		_frenar(delta)
 		return
 	_avanzar(delta, velocidad)
 
@@ -270,9 +246,6 @@ func _frenar(delta: float) -> void:
 	velocity.z = move_toward(velocity.z, 0.0, 14.0 * delta)
 
 
-## Avanza hacia _destino_objetivo siguiendo la ruta del NavigationAgent3D.
-## 'girar' hace que el modelo mire hacia donde camina (úsalo en patrulla; en
-## combate/alerta la mirada la controla _mirar_a).
 func _avanzar(delta: float, vel: float, girar := false) -> void:
 	if _retarget <= 0.0 and navegante.target_position.distance_to(_destino_objetivo) > 0.3:
 		navegante.target_position = _destino_objetivo
@@ -297,8 +270,6 @@ func _ve_al_jugador() -> bool:
 		return false
 	if _distancia() > rango_vision:
 		return false
-	# mientras patrulla no ve lo que tiene justo detrás; ya alertado, te sigue
-	# aunque te muevas a su espalda.
 	if estado == "patrulla":
 		var hacia := jugador.global_position - global_position
 		hacia.y = 0.0
@@ -308,13 +279,9 @@ func _ve_al_jugador() -> bool:
 	return _lo_veo()
 
 
-## Lo llama un compañero al caer, o el jugador al disparar cerca. El enemigo
-## no sabe exactamente dónde estás: investiga una zona aproximada.
 func alertar(punto: Vector3, propagar := true) -> void:
 	if muerto:
 		return
-	# solo reacciona si estaba tranquilo; si ya andaba buscando, ni caso
-	# (así no es imposible perderlo).
 	if estado == "patrulla":
 		estado = "alerta"
 		sin_ver = 0.0
@@ -392,8 +359,9 @@ func recibir_dano(cantidad: int, atacante: Node = null) -> void:
 	if muerto:
 		return
 	vida -= cantidad
+	Efectos.particulas(sangre)
 	var foco: Vector3 = atacante.global_position if atacante is Node3D else global_position
-	alertar(foco, false)   # reacciona él, pero no llama a toda la casa
+	alertar(foco, false)
 	if vida <= 0:
 		_morir(atacante)
 		return
@@ -412,15 +380,17 @@ func _morir(atacante: Node) -> void:
 	if luz != null:
 		luz.visible = false
 	if suelta_llave and escena_llave != null:
-		var raiz: Node = get_tree().current_scene
+		var raiz: Node = get_parent()
 		if raiz == null:
-			raiz = get_parent()
+			raiz = get_tree().current_scene
+		var punto := global_position + Vector3(0.0, 0.4, 0.0)
+		if raiz is Node3D:
+			punto = (raiz as Node3D).to_local(punto)
 		var llave: Node3D = escena_llave.instantiate()
-		llave.position = global_position + Vector3(0.0, 0.4, 0.0)
+		llave.position = punto
 		raiz.add_child.call_deferred(llave)
 	if atacante != null and atacante.has_method("avisar_baja"):
 		atacante.avisar_baja()
-	# un compañero cayendo pone en alerta a los de al lado
 	var foco: Vector3 = atacante.global_position if atacante is Node3D else global_position
 	_avisar_companeros(foco)
 	murio.emit(self)
