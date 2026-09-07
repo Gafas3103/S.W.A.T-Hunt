@@ -1,0 +1,6 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# carpeta suelta con un repo git vacio dentro, no es parte del proyecto
+/status/

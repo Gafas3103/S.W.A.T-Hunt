@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/nota.gd" id="1_not"]
+[ext_resource type="PackedScene" path="res://assets3d/props/nota/nota.fbx" id="2_not"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_not"]
+radius = 2.0
+
+[node name="Nota" type="Area3D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_not")
+titulo = "NOTA MANCHADA DE SANGRE"
+
+[node name="Modelo" parent="." instance=ExtResource("2_not")]
+transform = Transform3D(1.5, 0, 0, 0, 0.5130302, 1.4095395, 0, -1.4095395, 0.5130302, 0, 0, 0)
+
+[node name="Colision" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_not")
+
+[node name="Brillo" type="OmniLight3D" parent="."]
+light_color = Color(1, 0.92, 0.72, 1)
+light_energy = 0.5
+omni_range = 1.6

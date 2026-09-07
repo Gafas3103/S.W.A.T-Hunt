@@ -1,0 +1,16 @@
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets3d/props/candado/padlock_Padlock_BaseColor.png" id="1_alb"]
+[ext_resource type="Texture2D" path="res://assets3d/props/candado/padlock_Padlock_Normal.png" id="2_nor"]
+[ext_resource type="Texture2D" path="res://assets3d/props/candado/padlock_Padlock_Metallic.png" id="3_met"]
+[ext_resource type="Texture2D" path="res://assets3d/props/candado/padlock_Padlock_Roughness.png" id="4_rug"]
+
+[resource]
+resource_name = "Padlock"
+albedo_texture = ExtResource("1_alb")
+metallic = 1.0
+metallic_texture = ExtResource("3_met")
+roughness = 1.0
+roughness_texture = ExtResource("4_rug")
+normal_enabled = true
+normal_texture = ExtResource("2_nor")
