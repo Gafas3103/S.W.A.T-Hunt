@@ -28,7 +28,6 @@ ambient_light_energy = 0.6
 [node name="Nivel1" type="Node3D" unique_id=2115043807]
 script = ExtResource("10_niv")
 nota_path = NodePath("Nota")
-nota_posicion = Vector3(14.8, 1.18, 11)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1843281245]
 environment = SubResource("Ambiente")
@@ -69,7 +68,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.077639, 0.1, 1.1720781)
 [node name="Cobertura" parent="." instance=ExtResource("7_cob")]
 
 [node name="Nota" parent="." unique_id=1201601186 instance=ExtResource("3_not")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.8, 1.18, 11)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.18, 0)
 visible = false
 texto = "Jefe:
 
