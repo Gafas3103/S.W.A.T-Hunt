@@ -1,0 +1,192 @@
+[gd_scene load_steps=15 format=3]
+
+[sub_resource type="BoxMesh" id="BoxMesh_caja"]
+size = Vector3(1.1, 1, 1.1)
+[sub_resource type="BoxMesh" id="BoxMesh_caja_g"]
+size = Vector3(1.6, 1.2, 1.6)
+[sub_resource type="CylinderMesh" id="CylinderMesh_barril"]
+radius = 0.35
+height = 0.9
+radial_segments = 12
+[sub_resource type="BoxMesh" id="BoxMesh_muro"]
+size = Vector3(2.2, 0.9, 0.55)
+[sub_resource type="BoxMesh" id="BoxMesh_mesa"]
+size = Vector3(1.5, 1.05, 1.5)
+[sub_resource type="StandardMaterial3D" id="Mat_madera"]
+albedo_color = Color(0.42, 0.31, 0.18, 1)
+roughness = 0.85
+[sub_resource type="StandardMaterial3D" id="Mat_madera_osc"]
+albedo_color = Color(0.24, 0.17, 0.1, 1)
+roughness = 0.9
+[sub_resource type="StandardMaterial3D" id="Mat_verde"]
+albedo_color = Color(0.3, 0.38, 0.22, 1)
+roughness = 0.9
+[sub_resource type="StandardMaterial3D" id="Mat_gris"]
+albedo_color = Color(0.2, 0.22, 0.24, 1)
+roughness = 0.95
+[sub_resource type="BoxShape3D" id="Shape_caja"]
+size = Vector3(1.1, 1, 1.1)
+[sub_resource type="BoxShape3D" id="Shape_caja_g"]
+size = Vector3(1.6, 1.2, 1.6)
+[sub_resource type="CylinderShape3D" id="Shape_barril"]
+radius = 0.35
+height = 0.9
+[sub_resource type="BoxShape3D" id="Shape_muro"]
+size = Vector3(2.2, 0.9, 0.55)
+[sub_resource type="BoxShape3D" id="Shape_mesa"]
+size = Vector3(1.5, 1.05, 1.5)
+
+[node name="Cobertura" type="Node3D"]
+
+[node name="Mesa" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Mesa"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 0.575, 26.5)
+mesh = SubResource("BoxMesh_mesa")
+surface_material_override/0 = SubResource("Mat_madera_osc")
+[node name="Colision" type="CollisionShape3D" parent="Mesa"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 0.575, 26.5)
+shape = SubResource("Shape_mesa")
+
+[node name="Caja1" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Caja1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.55, 8)
+mesh = SubResource("BoxMesh_caja")
+surface_material_override/0 = SubResource("Mat_madera")
+[node name="Colision" type="CollisionShape3D" parent="Caja1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.55, 8)
+shape = SubResource("Shape_caja")
+
+[node name="Caja2" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Caja2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.55, 19.5)
+mesh = SubResource("BoxMesh_caja")
+surface_material_override/0 = SubResource("Mat_madera")
+[node name="Colision" type="CollisionShape3D" parent="Caja2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.55, 19.5)
+shape = SubResource("Shape_caja")
+
+[node name="Caja3" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Caja3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 0.55, 12)
+mesh = SubResource("BoxMesh_caja")
+surface_material_override/0 = SubResource("Mat_madera")
+[node name="Colision" type="CollisionShape3D" parent="Caja3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 0.55, 12)
+shape = SubResource("Shape_caja")
+
+[node name="Caja4" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Caja4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8, 0.55, 5.5)
+mesh = SubResource("BoxMesh_caja")
+surface_material_override/0 = SubResource("Mat_madera")
+[node name="Colision" type="CollisionShape3D" parent="Caja4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8, 0.55, 5.5)
+shape = SubResource("Shape_caja")
+
+[node name="Caja5" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Caja5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.55, 6)
+mesh = SubResource("BoxMesh_caja")
+surface_material_override/0 = SubResource("Mat_madera")
+[node name="Colision" type="CollisionShape3D" parent="Caja5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.55, 6)
+shape = SubResource("Shape_caja")
+
+[node name="Caja6" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Caja6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 0.55, 9)
+mesh = SubResource("BoxMesh_caja")
+surface_material_override/0 = SubResource("Mat_madera")
+[node name="Colision" type="CollisionShape3D" parent="Caja6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 0.55, 9)
+shape = SubResource("Shape_caja")
+
+[node name="Caja7" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Caja7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 0.55, 6)
+mesh = SubResource("BoxMesh_caja")
+surface_material_override/0 = SubResource("Mat_madera")
+[node name="Colision" type="CollisionShape3D" parent="Caja7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 0.55, 6)
+shape = SubResource("Shape_caja")
+
+[node name="Barri1" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Barri1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0.5, 15)
+mesh = SubResource("CylinderMesh_barril")
+surface_material_override/0 = SubResource("Mat_verde")
+[node name="Colision" type="CollisionShape3D" parent="Barri1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0.5, 15)
+shape = SubResource("Shape_barril")
+
+[node name="Barri2" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Barri2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 0.5, 17)
+mesh = SubResource("CylinderMesh_barril")
+surface_material_override/0 = SubResource("Mat_verde")
+[node name="Colision" type="CollisionShape3D" parent="Barri2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 0.5, 17)
+shape = SubResource("Shape_barril")
+
+[node name="Barri3" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Barri3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0.5, 24)
+mesh = SubResource("CylinderMesh_barril")
+surface_material_override/0 = SubResource("Mat_verde")
+[node name="Colision" type="CollisionShape3D" parent="Barri3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0.5, 24)
+shape = SubResource("Shape_barril")
+
+[node name="Barri4" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Barri4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.8, 0.5, 9)
+mesh = SubResource("CylinderMesh_barril")
+surface_material_override/0 = SubResource("Mat_verde")
+[node name="Colision" type="CollisionShape3D" parent="Barri4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.8, 0.5, 9)
+shape = SubResource("Shape_barril")
+
+[node name="Barri5" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Barri5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 0.5, 21.5)
+mesh = SubResource("CylinderMesh_barril")
+surface_material_override/0 = SubResource("Mat_verde")
+[node name="Colision" type="CollisionShape3D" parent="Barri5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 0.5, 21.5)
+shape = SubResource("Shape_barril")
+
+[node name="Barri6" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Barri6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6, 0.5, 24)
+mesh = SubResource("CylinderMesh_barril")
+surface_material_override/0 = SubResource("Mat_verde")
+[node name="Colision" type="CollisionShape3D" parent="Barri6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6, 0.5, 24)
+shape = SubResource("Shape_barril")
+
+[node name="Muro1" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Muro1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0.5, 11)
+mesh = SubResource("BoxMesh_muro")
+surface_material_override/0 = SubResource("Mat_gris")
+[node name="Colision" type="CollisionShape3D" parent="Muro1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0.5, 11)
+shape = SubResource("Shape_muro")
+
+[node name="Muro2" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Muro2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0.5, 18)
+mesh = SubResource("BoxMesh_muro")
+surface_material_override/0 = SubResource("Mat_gris")
+[node name="Colision" type="CollisionShape3D" parent="Muro2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0.5, 18)
+shape = SubResource("Shape_muro")
+
+[node name="Muro3" type="StaticBody3D" parent="."]
+[node name="Malla" type="MeshInstance3D" parent="Muro3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.6, 0.5, 8)
+mesh = SubResource("BoxMesh_muro")
+surface_material_override/0 = SubResource("Mat_gris")
+[node name="Colision" type="CollisionShape3D" parent="Muro3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.6, 0.5, 8)
+shape = SubResource("Shape_muro")
