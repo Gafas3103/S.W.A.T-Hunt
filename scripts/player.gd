@@ -147,6 +147,18 @@ func _ready() -> void:
 	armas.arma_cambiada.connect(_reenviar_arma)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	emitir_estado()
+	_colocar_en_suelo.call_deferred()
+
+
+func _colocar_en_suelo() -> void:
+	# El spawn del nivel puede estar a cualquier altura; en lugar de caer desde
+	# el aire, anclamos el jugador al suelo con un raycast hacia abajo.
+	var desde := global_position + Vector3.UP * 2.0
+	var consulta := PhysicsRayQueryParameters3D.create(desde, global_position - Vector3.UP * 12.0)
+	consulta.exclude = [get_rid()]
+	var golpe := get_world_3d().direct_space_state.intersect_ray(consulta)
+	if not golpe.is_empty():
+		global_position.y = golpe.position.y + 0.05
 
 
 func _reenviar_municion(cargador: int, reserva: int) -> void:
@@ -178,7 +190,7 @@ func _preparar_animaciones() -> void:
 		# Las animaciones de Mixamo llevan el desplazamiento del cuerpo dentro
 		# del hueso Hips. El juego ya mueve al personaje con velocity, así que
 		# esa traslación sobra: hace que el modelo "patine" y vuelva de golpe.
-		_quitar_traslacion_raiz(pista)
+		_quitar_traslacion_raiz(pista) if clave != "morir" else _conservar_desplome(pista)
 		if clave in CICLICAS:
 			pista.loop_mode = Animation.LOOP_LINEAR
 
@@ -189,6 +201,19 @@ func _quitar_traslacion_raiz(a: Animation) -> void:
 			var ruta := String(a.track_get_path(i))
 			if ruta.ends_with(":mixamorig_Hips") or ruta.ends_with(":Hips"):
 				a.remove_track(i)
+
+
+func _conservar_desplome(a: Animation) -> void:
+	# Igual que _quitar_traslacion_raiz pero conservando el eje Y del desplome:
+	# al morir el cuerpo cae a ras de suelo, pero sin avanzar/deslizarse en x/z.
+	for i in range(a.get_track_count() - 1, -1, -1):
+		if a.track_get_type(i) != Animation.TYPE_POSITION_3D:
+			continue
+		var ruta := String(a.track_get_path(i))
+		if ruta.ends_with(":mixamorig_Hips") or ruta.ends_with(":Hips"):
+			for k in range(a.track_get_key_count(i)):
+				var v: Vector3 = a.track_get_key_value(i, k)
+				a.track_set_key_value(i, k, Vector3(0.0, v.y, 0.0))
 
 
 func _montar_armas() -> void:

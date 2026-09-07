@@ -13,7 +13,7 @@ const CICLICAS := ["quieto", "caminar"]
 
 @export var vida_maxima := 100
 @export var dano := 8
-@export var cadencia := 1.5
+@export var cadencia := 0.95
 @export var rango_vision := 17.0
 @export var angulo_vision := 220.0        ## cono de visión en grados: tiene un punto ciego a la espalda
 @export var precision := 0.38
@@ -33,6 +33,7 @@ const CICLICAS := ["quieto", "caminar"]
 @onready var anim: AnimationPlayer = $character/AnimationPlayer
 @onready var arma: Node3D = $Arma
 @onready var colision: CollisionShape3D = $Colision
+@onready var navegante: NavigationAgent3D = $Navegante
 
 var vida := 0
 var jugador: Node3D = null
@@ -42,11 +43,13 @@ var muerto := false
 var animacion_actual := ""
 var _pista := {}
 
-# IA sencilla con 3 estados. No usa navegación: solo se mueve en línea recta
-# hacia su objetivo (suficiente para este nivel de salas abiertas).
+# IA sencilla con 3 estados. Se mueve por el navmesh del nivel: rodea esquinas
+# y persigue por los pasillos en vez de chocar contra las paredes.
 var estado := "patrulla"                 # patrulla | alerta | combate
 var sitio := Vector3.ZERO                # dónde empezó (centro de su patrulla)
 var destino := Vector3.ZERO              # a dónde camina ahora mismo
+var _destino_objetivo := Vector3.ZERO    # punto al que se dirige vía la navegación
+var _retarget := 0.0                     # evita re-pedir ruta cada frame
 var ultima_vista := Vector3.ZERO         # última posición conocida del jugador
 var sin_ver := 0.0
 var descanso := 0.0
@@ -64,6 +67,10 @@ func _ready() -> void:
 	jugador = get_tree().get_first_node_in_group("jugador") as Node3D
 	sitio = global_position
 	destino = global_position
+	navegante.avoidance_enabled = false
+	navegante.radius = 0.5
+	navegante.path_desired_distance = 0.6
+	navegante.target_desired_distance = 0.7
 
 
 func _preparar_animaciones() -> void:
@@ -82,16 +89,30 @@ func _preparar_animaciones() -> void:
 		var pista := anim.get_animation(nombre)
 		if pista != null:
 			for i in range(pista.get_track_count() - 1, -1, -1):
-				if pista.track_get_type(i) == Animation.TYPE_POSITION_3D:
-					var ruta := String(pista.track_get_path(i))
-					if ruta.ends_with(":mixamorig_Hips") or ruta.ends_with(":Hips"):
-						pista.remove_track(i)
+				if pista.track_get_type(i) != Animation.TYPE_POSITION_3D:
+					continue
+				var ruta := String(pista.track_get_path(i))
+				if not (ruta.ends_with(":mixamorig_Hips") or ruta.ends_with(":Hips")):
+					continue
+				if clave == "morir":
+					_conservar_desplome(pista, i)
+				else:
+					pista.remove_track(i)
 	for clave in CICLICAS:
 		if _pista.has(clave):
 			var a := anim.get_animation(_pista[clave])
 			if a != null:
 				a.loop_mode = Animation.LOOP_LINEAR
 	_reproducir("quieto", 0.1)
+
+
+## El clip de morir necesita desplomar la cadera hasta el suelo; si lo quitamos
+## entero, el cuerpo queda "flotando". Le dejamos solo el eje Y (el descenso),
+## anulando el avance x/z para que el cadáver no patine.
+func _conservar_desplome(a: Animation, track: int) -> void:
+	for k in range(a.track_get_key_count(track)):
+		var v: Vector3 = a.track_get_key_value(track, k)
+		a.track_set_key_value(track, k, Vector3(0.0, v.y, 0.0))
 
 
 func _montar_arma() -> void:
@@ -133,16 +154,21 @@ func _repartir_material(nodo: Node, metal: Material, madera: Material) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if not is_on_floor():
-		velocity += get_gravity() * delta
 	if muerto:
+		# ya no colisiona con el suelo (le quitamos la colisión al morir), así que
+		# si aplicamos gravedad el cuerpo se hunde. Lo dejamos clavado donde cayó.
 		_frenar(delta)
+		velocity.y = 0.0
 		move_and_slide()
 		return
+	if not is_on_floor():
+		velocity += get_gravity() * delta
 	if accion > 0.0:
 		accion -= delta
 	if espera > 0.0:
 		espera -= delta
+	if _retarget > 0.0:
+		_retarget -= delta
 	if reaccion > 0.0:
 		reaccion -= delta
 	if jugador == null:
@@ -182,44 +208,54 @@ func _physics_process(delta: float) -> void:
 
 func _hacer_combate(delta: float) -> void:
 	_mirar_a(ultima_vista, delta)
-	var dir := Vector3.ZERO
-	if _distancia() < distancia_combate * 0.55:
-		dir = global_position - jugador.global_position   # el jugador se acercó: retrocede
-	_mover(dir, delta, velocidad * 0.7)
+	var d := _distancia()
+	if d < distancia_combate * 0.5:
+		# le pisa los talones: se retira sin dejar de apuntarle
+		var huida := global_position + (global_position - jugador.global_position)
+		huida.y = global_position.y
+		_destino_objetivo = huida
+		_avanzar(delta, velocidad * 0.7)
+	elif d > distancia_combate * 0.9:
+		# el jugador se aleja: lo persigue sin dejar de vigilarlo
+		_destino_objetivo = ultima_vista
+		_avanzar(delta, velocidad)
+	else:
+		_frenar(delta)
 	if espera <= 0.0 and accion <= 0.0:
 		_disparar()
 
 
 func _hacer_alerta(delta: float) -> void:
-	var plano := ultima_vista - global_position
-	plano.y = 0.0
-	if plano.length() < 0.7:
+	# Si el último punto visto no cae sobre el navmesh, la ruta es vacía y el
+	# enemigo se queda plantado mirando: lo clavamos al punto navegable más
+	# cercano.
+	_destino_objetivo = NavigationServer3D.map_get_closest_point(navegante.get_navigation_map(), ultima_vista)
+	_mirar_a(ultima_vista, delta)
+	if navegante.is_navigation_finished():
 		_frenar(delta)      # llegó a donde lo vio por última vez y mira alrededor
 		return
-	var dir := plano.normalized()
-	_mirar_a(ultima_vista, delta)
-	_mover(dir, delta, velocidad)
+	_avanzar(delta, velocidad)
 
 
 func _hacer_patrulla(delta: float) -> void:
 	descanso -= delta
 	var plano := destino - global_position
 	plano.y = 0.0
-	if plano.length() < 0.6:
+	if plano.length() < 0.6 or navegante.is_navigation_finished():
 		_frenar(delta)
 		if descanso <= 0.0:
 			_nuevo_destino_patrulla()
 			descanso = randf_range(1.5, 4.0)
 		return
-	var dir := plano.normalized()
-	_mirar_hacia(dir, delta)
-	_mover(dir, delta, velocidad * 0.55)
+	_avanzar(delta, velocidad * 0.55, true)
 
 
 func _nuevo_destino_patrulla() -> void:
 	var ang := randf() * TAU
 	var r := randf() * radio_patrulla
 	destino = sitio + Vector3(cos(ang) * r, 0.0, sin(ang) * r)
+	_destino_objetivo = destino
+	navegante.target_position = destino
 
 
 func _mover(dir: Vector3, delta: float, vel: float) -> void:
@@ -232,6 +268,24 @@ func _mover(dir: Vector3, delta: float, vel: float) -> void:
 func _frenar(delta: float) -> void:
 	velocity.x = move_toward(velocity.x, 0.0, 14.0 * delta)
 	velocity.z = move_toward(velocity.z, 0.0, 14.0 * delta)
+
+
+## Avanza hacia _destino_objetivo siguiendo la ruta del NavigationAgent3D.
+## 'girar' hace que el modelo mire hacia donde camina (úsalo en patrulla; en
+## combate/alerta la mirada la controla _mirar_a).
+func _avanzar(delta: float, vel: float, girar := false) -> void:
+	if _retarget <= 0.0 and navegante.target_position.distance_to(_destino_objetivo) > 0.3:
+		navegante.target_position = _destino_objetivo
+		_retarget = 0.35
+	if navegante.is_navigation_finished():
+		_frenar(delta)
+		return
+	var siguiente := navegante.get_next_path_position()
+	var dir := siguiente - global_position
+	dir.y = 0.0
+	if girar and dir.length() > 0.1:
+		_mirar_hacia(dir, delta)
+	_mover(dir, delta, vel)
 
 
 func _distancia() -> float:
@@ -286,7 +340,7 @@ func _mirar_hacia(dir: Vector3, delta: float) -> void:
 	dir.y = 0.0
 	if dir.length() < 0.1:
 		return
-	modelo.rotation.y = lerp_angle(modelo.rotation.y, atan2(dir.x, dir.z), delta * 8.0)
+	modelo.rotation.y = lerp_angle(modelo.rotation.y, atan2(dir.x, dir.z), delta * 12.0)
 
 
 func _animar_movimiento() -> void:
@@ -311,6 +365,8 @@ func _lo_veo() -> bool:
 
 func _disparar() -> void:
 	if jugador == null:
+		return
+	if jugador.get("muerto") == true:
 		return
 	espera = cadencia
 	accion = 0.4

@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bq83sgwcyqhqr" path="res://escenas/puerta_candado.tscn" id="4_pue"]
 [ext_resource type="PackedScene" path="res://escenas/llave.tscn" id="5_lla"]
 [ext_resource type="PackedScene" path="res://hud.tscn" id="6_hud"]
+[ext_resource type="Script" path="res://scripts/navmap.gd" id="9_nav"]
 [ext_resource type="PackedScene" uid="uid://c4p16rsxosl2o" path="res://Mapa.tscn" id="8_70khi"]
 
 [sub_resource type="ProceduralSkyMaterial" id="Cielo_mat"]
@@ -33,9 +34,11 @@ transform = Transform3D(0.766044, -0.383022, 0.51503, 0, 0.803857, 0.594823, -0.
 light_energy = 1.15
 shadow_enabled = true
 
+[node name="Navegacion" type="Node3D" parent="." unique_id=2105220801]
+script = ExtResource("9_nav")
+
 [node name="Puerta" parent="." unique_id=185717999 instance=ExtResource("4_pue")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, 0)
-visible = false
 
 [node name="Jugador" parent="." unique_id=552160670 instance=ExtResource("1_jug")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.831439, 1.6791807, 27.730793)
@@ -57,7 +60,7 @@ suelta_llave = true
 escena_llave = ExtResource("5_lla")
 
 [node name="Enemigo5" parent="Enemigos" unique_id=1841240783 instance=ExtResource("2_ene")]
-transform = Transform3D(-0.011863355, 0, 0.9999296, 0, 1, 0, -0.9999296, 0, -0.011863355, -14.33442, 0.1, 9.1490345)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.33442, 0.1, 9.1490345)
 
 [node name="Enemigo6" parent="Enemigos" unique_id=1015161402 instance=ExtResource("2_ene")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.077639, 0.1, 1.1720781)

@@ -15,6 +15,18 @@ func _ready() -> void:
 	if candado != null:
 		candado.visible = false
 	body_entered.connect(_al_entrar)
+	_colocar_en_suelo.call_deferred()
+
+
+func _colocar_en_suelo() -> void:
+	# La llave es un Area3D (no le afecta la gravedad): si se suelta desde una
+	# altura, quedaría flotando. La anclamos al suelo con un raycast.
+	var desde := global_position + Vector3.UP
+	var consulta := PhysicsRayQueryParameters3D.create(desde, global_position - Vector3.UP * 8.0)
+	consulta.exclude = [get_rid()]
+	var golpe := get_world_3d().direct_space_state.intersect_ray(consulta)
+	if not golpe.is_empty():
+		global_position.y = golpe.position.y + 0.05
 
 
 func _process(delta: float) -> void:
